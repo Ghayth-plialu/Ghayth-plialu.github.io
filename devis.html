@@ -1,120 +1,108 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PLIALU — Générateur de devis</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"><\/script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"><\/script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #222; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLIALU — Devis</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1a2e38;min-height:100vh}
 
-    /* NAVBAR */
-    .nav { background: #0d2933; padding: 0 20px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
-    .nav-logo { margin-right: 30px; padding: 10px 0; display: flex; align-items: center; }
-    .nav-logo img { height: 42px; object-fit: contain; }
-    .nav-btn { background: none; border: none; color: #aaa; padding: 18px 20px; cursor: pointer; font-size: 14px; font-weight: 500; border-bottom: 3px solid transparent; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; }
-    .nav-btn:hover { color: #fff; }
-    .nav-btn.active { color: #fff; border-bottom-color: #e8fc69; }
+/* NAV */
+.nav{background:#0d2933;padding:0 24px;display:flex;align-items:center;gap:8px;height:52px;position:sticky;top:0;z-index:100}
+.nav-logo{color:#e8fc69;font-weight:800;font-size:17px;margin-right:16px;letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.nav-logo span{background:#e8fc69;color:#0d2933;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
+.nav-btn{background:transparent;border:none;color:#a0bcc4;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover{color:#fff}
+.nav-btn.active{background:#e8fc69;color:#0d2933}
 
-    .page { padding: 24px; max-width: 1100px; margin: 0 auto; }
+/* PAGE */
+.page{max-width:900px;margin:28px auto;padding:0 16px 40px}
 
-    .card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-    .card-title { font-size: 15px; font-weight: 700; color: #0d2933; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-    .card-title::before { content: ''; display: block; width: 4px; height: 18px; background: #e8fc69; border-radius: 2px; }
+/* CARD */
+.card{background:#fff;border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card-title{font-size:13px;font-weight:800;color:#1a2e38;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e8fc69}
 
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
-    label { display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .5px; }
-    input, select, textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; transition: border .2s; background: #fafafa; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #0d2933; background: #fff; }
-    textarea { resize: vertical; min-height: 80px; }
+/* FORM */
+label{display:block;font-size:10px;font-weight:700;color:#6b7a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:14px;background:#fff;color:#1a2e38;transition:border .2s;font-family:'Segoe UI',sans-serif}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#0d2933}
+input::placeholder,textarea::placeholder{color:#b0bec5}
+textarea{resize:vertical;min-height:90px}
 
-    .btn { padding: 11px 22px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
-    .btn-primary { background: #0d2933; color: #fff; }
-    .btn-primary:hover { background: #1a4a5c; }
-    .btn-accent { background: #e8fc69; color: #0d2933; }
-    .btn-accent:hover { background: #d4e85a; }
-    .btn-success { background: #059669; color: #fff; }
-    .btn-success:hover { background: #047857; }
-    .btn-danger { background: #dc2626; color: #fff; }
-    .btn-danger:hover { background: #b91c1c; }
-    .btn-outline { background: transparent; border: 2px solid #0d2933; color: #0d2933; }
-    .btn-outline:hover { background: #0d2933; color: #fff; }
-    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
-    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+/* TABLE DEVIS */
+.devis-wrap{overflow-x:auto;margin-bottom:0}
+.devis-table{width:100%;border-collapse:collapse;font-size:12px;min-width:800px}
+.devis-table thead tr{background:#0d2933}
+.devis-table thead th{color:#e8fc69;padding:10px 10px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.devis-table tbody tr:hover td{background:#f8fafc}
+.devis-table tbody td{padding:8px 10px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+.devis-table tbody td input{padding:5px 7px;font-size:12px;border:1.5px solid #e2e8f0;border-radius:6px;width:100%;background:#f8fafc}
+.devis-table tbody td input:focus{border-color:#e8fc69;background:#fff;outline:none}
+.devis-table .td-total{font-weight:700;color:#0d2933;white-space:nowrap}
 
-    /* LIVRAISON TOGGLE */
-    .livraison-toggle { display: flex; gap: 0; border: 2px solid #0d2933; border-radius: 8px; overflow: hidden; width: fit-content; margin-top: 8px; }
-    .livraison-toggle button { padding: 10px 22px; border: none; background: #fff; color: #0d2933; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; }
-    .livraison-toggle button.active { background: #0d2933; color: #e8fc69; }
-    .livraison-toggle button:hover:not(.active) { background: #f0f2f5; }
+/* BARRE TOTAUX */
+.totaux-bar{background:#0d2933;border-radius:0 0 8px 8px;padding:14px 18px;display:flex;justify-content:flex-end;gap:28px;align-items:center}
+.totaux-bar .t-item{text-align:right}
+.totaux-bar .t-label{font-size:10px;color:#a0bcc4;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.totaux-bar .t-val{font-size:18px;font-weight:800;color:#e8fc69}
+.totaux-bar .t-val.white{color:#fff;font-size:15px}
 
-    /* UPLOAD */
-    .upload-area { border: 2px dashed #0d2933; border-radius: 10px; padding: 30px; background: #f0f8fa; text-align: center; cursor: pointer; transition: all .2s; margin-bottom: 12px; }
-    .upload-area:hover { border-color: #e8fc69; background: #f7fde8; }
-    .upload-area input[type=file] { display: none; }
-    .upload-icon { font-size: 36px; margin-bottom: 10px; }
-    .upload-txt { font-size: 14px; color: #0d2933; font-weight: 700; }
-    .upload-sub { font-size: 12px; color: #6b7280; margin-top: 6px; }
-    .pdf-preview { background: #f0f8fa; border: 2px solid #0d2933; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: #0d2933; font-weight: 600; }
-    .pdf-remove { margin-left: auto; cursor: pointer; background: #dc2626; color: #fff; border: none; border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+/* BTN LIGNE MANUELLE */
+.btn-ligne{background:#e8fc69;color:#0d2933;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:800;cursor:pointer;transition:.2s;margin:10px 0}
+.btn-ligne:hover{background:#d4f040}
 
-    /* TOTAL BAR */
-    .total-bar { background: #0d2933; color: #fff; border-radius: 10px; padding: 16px 24px; display: flex; gap: 30px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-    .total-bar .t-item { text-align: center; }
-    .total-bar .t-label { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: .5px; }
-    .total-bar .t-val { font-size: 22px; font-weight: 800; color: #e8fc69; }
+/* BTN SUPPRIMER */
+.btn-del{background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:.2s;white-space:nowrap}
+.btn-del:hover{background:#fca5a5}
 
-    /* TABLE */
-    .devis-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .devis-table th { background: #0d2933; color: #fff; padding: 10px 12px; text-align: left; font-size: 12px; white-space: nowrap; }
-    .devis-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
-    .devis-table tr:hover td { background: #fafdf0; }
-    .devis-table td input { padding: 5px 8px; font-size: 13px; border: 1.5px solid #e5e7eb; border-radius: 6px; width: 100%; background: #fafafa; }
-    .devis-table td input:focus { border-color: #e8fc69; outline: none; background: #fff; }
-    .table-wrap { overflow-x: auto; }
+/* UPLOAD PDF */
+.upload-zone{border:2px dashed #c8d6db;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.2s;background:#f8fafc}
+.upload-zone:hover{border-color:#0d2933;background:#f0f4f8}
+.upload-zone input{display:none}
+.upload-icon{font-size:28px;margin-bottom:6px}
+.upload-txt{font-size:14px;font-weight:700;color:#0d2933}
+.upload-sub{font-size:12px;color:#6b7a80;margin-top:4px}
+.pdf-preview{background:#f0f8fa;border:2px solid #0d2933;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;font-size:13px;color:#0d2933;font-weight:600}
+.pdf-remove{margin-left:auto;background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer}
 
-    /* LIGNE MANUELLE */
-    .add-manual { background: #f7fde8; border: 2px dashed #e8fc69; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
-    .add-manual-title { font-size: 13px; font-weight: 700; color: #0d2933; margin-bottom: 12px; }
+/* BTN GENERER */
+.btn-gen{background:#e8fc69;color:#0d2933;border:none;border-radius:8px;padding:13px 28px;font-size:15px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-gen:hover{background:#d4f040;transform:translateY(-1px)}
 
-    .sep { border: none; border-top: 1px solid #f0f0f0; margin: 20px 0; }
+/* IMPORT LIGNE */
+.btn-import{background:#f0f4f8;color:#0d2933;border:2px solid #dde3e8;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-import:hover{border-color:#0d2933}
 
-    .empty-state { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
-    .empty-state .empty-icon { font-size: 40px; margin-bottom: 10px; }
+.msg-import{background:#dcfce7;color:#166534;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;display:none;margin-top:10px}
 
-    /* NOTIFICATION */
-    .notif { display: none; padding: 10px 16px; background: #ecfdf5; border: 1.5px solid #059669; border-radius: 8px; font-size: 13px; color: #065f46; font-weight: 600; margin-bottom: 12px; }
-
-    @media (max-width: 600px) {
-      .grid2, .grid3 { grid-template-columns: 1fr; }
-    }
-  </style>
+@media(max-width:650px){.grid2,.grid3{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">
-    <img src="https://media.licdn.com/dms/image/v2/D4E0BAQEVHChGDClWSw/company-logo_200_200/company-logo_200_200/0/1711383705214/plialu_logo?e=2147483647&v=beta&t=Yynd6OIt06-9izNKmvnm66nc15JvNhJKp5H75QXgh50" alt="PLIALU">
-  </div>
-  <a href="index.html" class="nav-btn">&#127968; Accueil</a>
-  <a href="calcul.html" class="nav-btn">&#129518; Calculette</a>
-  <a href="devis.html" class="nav-btn active">&#128196; Devis</a>
+  <div class="nav-logo"><span>○</span> PLIALU</div>
+  <a class="nav-btn" href="calcul.html">Calculette</a>
+  <a class="nav-btn active" href="devis.html">Devis</a>
 </nav>
 
 <div class="page">
 
-  <!-- ══ INFOS CLIENT ══ -->
+  <!-- 1 — INFORMATIONS DEVIS -->
   <div class="card">
-    <div class="card-title">Informations client &amp; chantier</div>
-    <div class="grid3">
+    <div class="card-title">1 — Informations devis</div>
+    <div class="grid3" style="margin-bottom:14px">
       <div>
-        <label>N&#176; Devis</label>
+        <label>N° de devis</label>
         <input type="text" id="d-numero">
       </div>
       <div>
@@ -122,156 +110,73 @@
         <input type="date" id="d-date">
       </div>
       <div>
-        <label>Validit&#233; (jours)</label>
+        <label>Validité (jours)</label>
         <input type="number" id="d-validite" value="30">
       </div>
     </div>
-    <div class="grid2" style="margin-top:14px">
+    <div class="grid2">
       <div>
-        <label>Client / Entreprise</label>
-        <input type="text" id="d-client" placeholder="ex: LES &#8212; Hugo HUMBERT">
+        <label>Chantier / Projet</label>
+        <input type="text" id="d-chantier" placeholder="Nom du chantier">
       </div>
       <div>
-        <label>Contact / Email</label>
-        <input type="text" id="d-contact" placeholder="ex: hugo@email.fr">
+        <label>Référence client</label>
+        <input type="text" id="d-ref" placeholder="Réf. ou affaire">
       </div>
-    </div>
-    <div style="margin-top:14px">
-      <label>Chantier / R&#233;f&#233;rence</label>
-      <input type="text" id="d-chantier" placeholder="ex: SWEET HOME &#8212; R&#233;novation fa&#231;ade">
-    </div>
-    <div style="margin-top:18px">
-      <label>Condition de livraison</label>
-      <div class="livraison-toggle">
-        <button id="btn-depart" class="active" onclick="setLivraison('depart')">&#127981; Prix d&#233;part usine</button>
-        <button id="btn-franco" onclick="setLivraison('franco')">&#128666; Prix franco livraison</button>
-      </div>
-    </div>
-    <div style="margin-top:14px">
-      <label>Commentaire (affich&#233; en italique sur le devis)</label>
-      <textarea id="d-comment" placeholder="ex: Livraison sous 10 jours ouvr&#233;s &#8212; Prix fermes 30 jours..."></textarea>
     </div>
   </div>
 
-  <!-- ══ PDF CLIENT ══ -->
+  <!-- 2 — CLIENT -->
   <div class="card">
-    <div class="card-title">&#128206; Demande client (PDF)</div>
-    <p style="font-size:13px;color:#555;margin-bottom:16px;">Importez le PDF de la demande client. Il sera automatiquement fusionn&#233; &#224; la suite de votre devis dans le fichier t&#233;l&#233;charg&#233;.</p>
-    <div class="upload-area" id="upload-area" onclick="document.getElementById('pdf-input').click()">
-      <input type="file" id="pdf-input" accept="application/pdf" onchange="onPDFUpload(event)">
-      <div class="upload-icon">&#128196;</div>
-      <div class="upload-txt">Cliquez pour importer la demande client (PDF)</div>
-      <div class="upload-sub">Le PDF sera fusionn&#233; &#224; la suite du devis g&#233;n&#233;r&#233;</div>
-    </div>
-    <div id="pdf-preview" style="display:none" class="pdf-preview">
-      <span style="font-size:24px">&#128196;</span>
+    <div class="card-title">2 — Client</div>
+    <div class="grid2" style="margin-bottom:14px">
       <div>
-        <div id="pdf-name" style="font-weight:700"></div>
-        <div style="font-size:11px;color:#059669;margin-top:2px">&#10003; Sera joint en annexe au devis</div>
+        <label>Raison sociale</label>
+        <input type="text" id="d-client">
       </div>
-      <button class="pdf-remove" onclick="removePDF()">&#10005; Retirer</button>
+      <div>
+        <label>Contact</label>
+        <input type="text" id="d-contact">
+      </div>
+    </div>
+    <div class="grid3">
+      <div>
+        <label>Email</label>
+        <input type="email" id="d-email">
+      </div>
+      <div>
+        <label>Téléphone</label>
+        <input type="tel" id="d-tel">
+      </div>
+      <div>
+        <label>Adresse</label>
+        <input type="text" id="d-adresse">
+      </div>
     </div>
   </div>
 
-  <!-- ══ LIGNES DEVIS ══ -->
+  <!-- 3 — LIGNES DU DEVIS -->
   <div class="card">
-    <div class="card-title">&#128221; Lignes du devis</div>
+    <div class="card-title">3 — Lignes du devis</div>
 
-    <div id="notif-import" class="notif"></div>
-
-    <!-- Ajout manuel -->
-    <div class="add-manual">
-      <div class="add-manual-title">&#10133; Ajouter une ligne manuellement</div>
-      <div class="grid3">
-        <div>
-          <label>D&#233;signation</label>
-          <input type="text" id="m-desig" placeholder="ex: Couvertine RAL 7016 - 15/10">
-        </div>
-        <div>
-          <label>Mati&#232;re</label>
-          <select id="m-mat">
-            <option>Aluminium</option>
-            <option>Acier</option>
-            <option>Inox</option>
-            <option>Galvanis&#233;</option>
-            <option>Zinc</option>
-          </select>
-        </div>
-        <div>
-          <label>RAL / Finition</label>
-          <input type="text" id="m-ral" placeholder="ex: RAL 7016">
-        </div>
-      </div>
-      <div class="grid3" style="margin-top:12px">
-        <div>
-          <label>&#201;paisseur</label>
-          <select id="m-ep">
-            <option>10/10</option>
-            <option selected>15/10</option>
-            <option>20/10</option>
-            <option>25/10</option>
-            <option>30/10</option>
-          </select>
-        </div>
-        <div>
-          <label>DVP (mm)</label>
-          <input type="number" id="m-dvp" placeholder="ex: 350" min="0">
-        </div>
-        <div>
-          <label>Longueur (mm)</label>
-          <input type="number" id="m-lg" placeholder="ex: 3000" min="0">
-        </div>
-      </div>
-      <div class="grid2" style="margin-top:12px">
-        <div>
-          <label>Quantit&#233;</label>
-          <input type="number" id="m-qte" value="1" min="1">
-        </div>
-        <div>
-          <label>PU HT (&#8364;)</label>
-          <input type="number" id="m-pu" placeholder="ex: 12.50" step="0.01" min="0">
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-accent" onclick="ajouterManuel()">&#10133; Ajouter la ligne</button>
-      </div>
+    <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+      <button class="btn-import" onclick="importerDepuisCalculette()">⬇ Importer depuis la calculette</button>
+      <button class="btn-ligne" onclick="ajouterLigneManuelle()">+ Ligne manuelle</button>
     </div>
+    <div id="msg-import" class="msg-import">✅ Lignes importées depuis la calculette !</div>
 
-    <!-- TOTAL BAR -->
-    <div class="total-bar" id="total-bar" style="display:none">
-      <div class="t-item">
-        <div class="t-label">Lignes</div>
-        <div class="t-val" id="t-nb">0</div>
-      </div>
-      <div class="t-item">
-        <div class="t-label">Total HT</div>
-        <div class="t-val" id="t-ht">0.00 &#8364;</div>
-      </div>
-      <div class="t-item">
-        <div class="t-label">TVA 20%</div>
-        <div class="t-val" id="t-tva">0.00 &#8364;</div>
-      </div>
-      <div class="t-item">
-        <div class="t-label">Total TTC</div>
-        <div class="t-val" id="t-ttc">0.00 &#8364;</div>
-      </div>
-      <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-danger btn-sm" onclick="viderDevis()">&#128465; Tout vider</button>
-      </div>
-    </div>
-
-    <!-- TABLE -->
-    <div class="table-wrap">
+    <div class="devis-wrap">
       <table class="devis-table">
         <thead>
           <tr>
-            <th style="min-width:180px">D&#233;signation</th>
-            <th>Mati&#232;re</th>
+            <th>Désignation</th>
+            <th>Catégorie</th>
+            <th>Matière</th>
             <th>RAL</th>
-            <th>&#201;p.</th>
-            <th>DVP mm</th>
-            <th>Lg mm</th>
-            <th>Qt&#233;</th>
+            <th>Ép.</th>
+            <th>DVP</th>
+            <th>Long.</th>
+            <th>Qté</th>
             <th>PU HT</th>
             <th>Total HT</th>
             <th></th>
@@ -281,331 +186,372 @@
       </table>
     </div>
 
-    <div class="btn-row" style="margin-top:20px">
-      <button class="btn btn-primary" onclick="genererPDF()">&#128196; T&#233;l&#233;charger le devis PDF</button>
-      <button class="btn btn-outline" onclick="importerDepuisCalc()">&#8635; Recharger depuis calculette</button>
+    <!-- TOTAUX -->
+    <div class="totaux-bar">
+      <div class="t-item">
+        <div class="t-label">Total HT</div>
+        <div class="t-val" id="t-ht">0.00 €</div>
+      </div>
+      <div class="t-item">
+        <div class="t-label">TVA 20%</div>
+        <div class="t-val white" id="t-tva">0.00 €</div>
+      </div>
+      <div class="t-item">
+        <div class="t-label">Total TTC</div>
+        <div class="t-val white" id="t-ttc">0.00 €</div>
+      </div>
     </div>
   </div>
 
-</div>
+  <!-- 4 — COMMENTAIRES & OPTIONS -->
+  <div class="card">
+    <div class="card-title">4 — Commentaires & Options</div>
+
+    <div style="margin-bottom:18px">
+      <label>Commentaire / Conditions</label>
+      <textarea id="d-comment" placeholder="Conditions de règlement, délais, remarques..."></textarea>
+    </div>
+
+    <div>
+      <label>Joindre demande client (PDF)</label>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('pdf-input').click()">
+        <input type="file" id="pdf-input" accept="application/pdf" onchange="onPDFUpload(event)">
+        <div class="upload-icon">📎</div>
+        <div class="upload-txt">Cliquez pour joindre un PDF</div>
+        <div class="upload-sub">Le document sera fusionné à la suite du devis</div>
+      </div>
+      <div id="pdf-preview" style="display:none" class="pdf-preview">
+        <span style="font-size:22px">📄</span>
+        <div>
+          <div id="pdf-name" style="font-weight:700"></div>
+          <div style="font-size:11px;color:#059669;margin-top:2px">✅ Sera joint en annexe</div>
+        </div>
+        <button class="pdf-remove" onclick="removePDF()">✕ Retirer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 — GÉNÉRATION PDF -->
+  <div class="card">
+    <div class="card-title">5 — Génération PDF</div>
+    <button class="btn-gen" onclick="genererPDF()">📄 Générer le devis PDF</button>
+  </div>
+
+</div><!-- end page -->
 
 <script>
-// ════ LIVRAISON ════
-let modelivraison = 'depart';
-function setLivraison(v) {
-  modelivraison = v;
-  document.getElementById('btn-depart').classList.toggle('active', v==='depart');
-  document.getElementById('btn-franco').classList.toggle('active', v==='franco');
+// ============================================================
+// ÉTAT
+// ============================================================
+let lignesDevis = [];
+let idCounter   = 1;
+let pdfBytes    = null;
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('d-date').value    = new Date().toISOString().split('T')[0];
+  document.getElementById('d-numero').value  = 'DEV-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
+  renderTable();
+});
+
+// ============================================================
+// IMPORT DEPUIS CALCULETTE (localStorage)
+// ============================================================
+function importerDepuisCalculette(){
+  const stock = JSON.parse(localStorage.getItem('plialu-devis') || '[]');
+  if(!stock.length){ alert('Aucune ligne en attente depuis la calculette.'); return; }
+  stock.forEach(l => {
+    lignesDevis.push({
+      id:          idCounter++,
+      designation: l.designation || '',
+      categorie:   l.categorie   || '',
+      matiere:     l.matiere     || '',
+      ral:         l.ral         || '',
+      ep:          l.ep          || '',
+      dvp:         l.dvp         || '',
+      lg:          l.lg          || '',
+      qte:         l.qte         || 1,
+      puHT:        parseFloat(l.puHT) || 0
+    });
+  });
+  localStorage.removeItem('plialu-devis');
+  renderTable();
+  const msg = document.getElementById('msg-import');
+  msg.style.display = 'block';
+  setTimeout(()=>msg.style.display='none', 3000);
 }
 
-// ════ PDF CLIENT ════
-let pdfBytes = null;
-function onPDFUpload(e) {
+// ============================================================
+// LIGNE MANUELLE
+// ============================================================
+function ajouterLigneManuelle(){
+  lignesDevis.push({
+    id: idCounter++,
+    designation:'', categorie:'', matiere:'Aluminium',
+    ral:'', ep:'15/10', dvp:'', lg:3000, qte:1, puHT:0
+  });
+  renderTable();
+}
+
+// ============================================================
+// SUPPRIMER
+// ============================================================
+function supprimerLigne(id){
+  lignesDevis = lignesDevis.filter(l => l.id !== id);
+  renderTable();
+}
+
+// ============================================================
+// UPDATE CHAMP
+// ============================================================
+function updateLigne(id, champ, val){
+  const l = lignesDevis.find(l => l.id === id);
+  if(!l) return;
+  l[champ] = (champ === 'qte' || champ === 'puHT' || champ === 'dvp' || champ === 'lg')
+    ? parseFloat(val) || 0
+    : val;
+  // Rafraîchir seulement le total de la ligne + les totaux
+  const totalEl = document.getElementById('total-ligne-'+id);
+  if(totalEl) totalEl.textContent = (l.qte * l.puHT).toFixed(2)+' €';
+  updateTotaux();
+}
+
+// ============================================================
+// RENDER TABLE
+// ============================================================
+function renderTable(){
+  const tbody = document.getElementById('devis-tbody');
+  tbody.innerHTML = '';
+
+  lignesDevis.forEach(l => {
+    const total = (l.qte * l.puHT).toFixed(2);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input value="${l.designation}" onchange="updateLigne(${l.id},'designation',this.value)" style="min-width:140px"></td>
+      <td><input value="${l.categorie}"   onchange="updateLigne(${l.id},'categorie',this.value)"   style="min-width:100px"></td>
+      <td><input value="${l.matiere}"     onchange="updateLigne(${l.id},'matiere',this.value)"     style="min-width:80px"></td>
+      <td><input value="${l.ral}"         onchange="updateLigne(${l.id},'ral',this.value)"         style="min-width:70px"></td>
+      <td><input value="${l.ep}"          onchange="updateLigne(${l.id},'ep',this.value)"          style="min-width:55px"></td>
+      <td><input type="number" value="${l.dvp}" onchange="updateLigne(${l.id},'dvp',this.value)"  style="min-width:55px"></td>
+      <td><input type="number" value="${l.lg}"  onchange="updateLigne(${l.id},'lg',this.value)"   style="min-width:65px"></td>
+      <td><input type="number" value="${l.qte}" onchange="updateLigne(${l.id},'qte',this.value)"  style="min-width:45px" min="1"></td>
+      <td><input type="number" value="${l.puHT.toFixed(2)}" onchange="updateLigne(${l.id},'puHT',this.value)" style="min-width:70px" step="0.01"></td>
+      <td class="td-total" id="total-ligne-${l.id}">${total} €</td>
+      <td><button class="btn-del" onclick="supprimerLigne(${l.id})">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updateTotaux();
+}
+
+// ============================================================
+// TOTAUX
+// ============================================================
+function updateTotaux(){
+  const ht  = lignesDevis.reduce((s,l) => s + l.qte * l.puHT, 0);
+  const tva = ht * 0.20;
+  const ttc = ht + tva;
+  document.getElementById('t-ht').textContent  = ht.toFixed(2)+' €';
+  document.getElementById('t-tva').textContent = tva.toFixed(2)+' €';
+  document.getElementById('t-ttc').textContent = ttc.toFixed(2)+' €';
+}
+
+// ============================================================
+// PDF CLIENT
+// ============================================================
+function onPDFUpload(e){
   const file = e.target.files[0];
-  if (!file) return;
+  if(!file) return;
   const reader = new FileReader();
   reader.onload = ev => { pdfBytes = new Uint8Array(ev.target.result); };
   reader.readAsArrayBuffer(file);
   document.getElementById('pdf-name').textContent = file.name;
   document.getElementById('pdf-preview').style.display = 'flex';
-  document.getElementById('upload-area').style.display = 'none';
+  document.getElementById('upload-zone').style.display  = 'none';
 }
-function removePDF() {
+
+function removePDF(){
   pdfBytes = null;
   document.getElementById('pdf-input').value = '';
   document.getElementById('pdf-preview').style.display = 'none';
-  document.getElementById('upload-area').style.display = 'block';
+  document.getElementById('upload-zone').style.display  = 'block';
 }
 
-// ════ LIGNES ════
-let lignesDevis = [];
-let idCounter = 1;
+// ============================================================
+// GÉNÉRATION PDF
+// ============================================================
+async function genererPDF(){
+  const { jsPDF }  = window.jspdf;
+  const doc        = new jsPDF({ unit:'mm', format:'a4' });
 
-function importerDepuisCalc() {
-  const stored = localStorage.getItem('plialu-devis');
-  if (!stored) { showNotif('Aucune ligne en attente depuis la calculette.', false); return; }
-  const nouvelles = JSON.parse(stored);
-  if (nouvelles.length === 0) { showNotif('Aucune ligne en attente.', false); return; }
-  nouvelles.forEach(l => {
-    lignesDevis.push({ ...l, id: idCounter++ });
-  });
-  localStorage.removeItem('plialu-devis');
-  renderDevis();
-  showNotif(nouvelles.length + ' ligne(s) import&#233;e(s) depuis la calculette !', true);
-}
+  const numero  = document.getElementById('d-numero').value   || 'DEV-????';
+  const date    = document.getElementById('d-date').value      || '';
+  const validite= document.getElementById('d-validite').value  || '30';
+  const chantier= document.getElementById('d-chantier').value  || '';
+  const ref     = document.getElementById('d-ref').value       || '';
+  const client  = document.getElementById('d-client').value    || '';
+  const contact = document.getElementById('d-contact').value   || '';
+  const email   = document.getElementById('d-email').value     || '';
+  const tel     = document.getElementById('d-tel').value       || '';
+  const adresse = document.getElementById('d-adresse').value   || '';
+  const comment = document.getElementById('d-comment').value   || '';
 
-function ajouterManuel() {
-  const desig = document.getElementById('m-desig').value.trim();
-  const pu    = parseFloat(document.getElementById('m-pu').value);
-  if (!desig) { alert('Renseignez une d&#233;signation.'); return; }
-  if (!pu || pu <= 0) { alert('Renseignez un prix unitaire valide.'); return; }
-  lignesDevis.push({
-    id:          idCounter++,
-    designation: desig,
-    matiere:     document.getElementById('m-mat').value,
-    ral:         document.getElementById('m-ral').value,
-    ep:          document.getElementById('m-ep').value,
-    dvp:         parseFloat(document.getElementById('m-dvp').value) || 0,
-    lg:          parseFloat(document.getElementById('m-lg').value) || 0,
-    qte:         parseInt(document.getElementById('m-qte').value) || 1,
-    puHT:        pu
-  });
-  // reset form
-  ['m-desig','m-ral','m-dvp','m-lg','m-pu'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('m-qte').value = 1;
-  renderDevis();
-}
+  // ── HEADER ──
+  doc.setFillColor(13,41,51);
+  doc.rect(0,0,210,32,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text('PLIALU', 14, 19);
+  doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.setTextColor(160,188,196);
+  doc.text('Façonnage aluminium sur mesure — Enveloppe du bâtiment', 14, 26);
 
-function supprimerLigne(id) {
-  lignesDevis = lignesDevis.filter(l => l.id !== id);
-  renderDevis();
-}
+  // Badge DEVIS
+  doc.setFillColor(232,252,105);
+  doc.roundedRect(148,7,52,18,3,3,'F');
+  doc.setTextColor(13,41,51);
+  doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.text('DEVIS', 174, 17, {align:'center'});
+  doc.setFontSize(8);
+  doc.text(numero, 174, 23, {align:'center'});
 
-function updateLigne(id, champ, val) {
-  const l = lignesDevis.find(x => x.id === id);
-  if (!l) return;
-  if (['qte','dvp','lg'].includes(champ)) l[champ] = parseFloat(val) || 0;
-  else if (champ === 'puHT') l.puHT = parseFloat(val) || 0;
-  else l[champ] = val;
-  updateTotaux();
-}
+  // ── INFOS DEVIS ──
+  let y = 40;
+  doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
+  doc.text(`Date : ${date}`, 14, y);
+  doc.text(`Validité : ${validite} jours`, 70, y);
+  if(chantier) doc.text(`Chantier : ${chantier}`, 14, y+6);
+  if(ref)      doc.text(`Réf. : ${ref}`, 14, y+12);
 
-function renderDevis() {
-  const tbody = document.getElementById('devis-tbody');
-  if (lignesDevis.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">&#128196;</div>Aucune ligne — utilisez la calculette ou ajoutez manuellement</div></td></tr>';
-    document.getElementById('total-bar').style.display = 'none';
-    return;
-  }
-  tbody.innerHTML = '';
-  lignesDevis.forEach(l => {
-    const total = (l.qte * l.puHT).toFixed(2);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><input type="text" value="${l.designation}" onchange="updateLigne(${l.id},'designation',this.value)" style="min-width:160px"></td>
-      <td><input type="text" value="${l.matiere}" onchange="updateLigne(${l.id},'matiere',this.value)" style="width:90px"></td>
-      <td><input type="text" value="${l.ral}" onchange="updateLigne(${l.id},'ral',this.value)" style="width:80px" placeholder="RAL..."></td>
-      <td><input type="text" value="${l.ep}" onchange="updateLigne(${l.id},'ep',this.value)" style="width:65px"></td>
-      <td><input type="number" value="${l.dvp}" onchange="updateLigne(${l.id},'dvp',this.value)" style="width:65px"></td>
-      <td><input type="number" value="${l.lg}" onchange="updateLigne(${l.id},'lg',this.value)" style="width:70px"></td>
-      <td><input type="number" value="${l.qte}" onchange="updateLigne(${l.id},'qte',this.value)" style="width:55px" min="1"></td>
-      <td><input type="number" value="${l.puHT.toFixed(2)}" onchange="updateLigne(${l.id},'puHT',this.value)" style="width:80px" step="0.01"></td>
-      <td style="font-weight:700;color:#0d2933;white-space:nowrap" id="total-${l.id}">${total} &#8364;</td>
-      <td><button class="btn btn-danger btn-sm" onclick="supprimerLigne(${l.id})">&#128465;</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-  document.getElementById('total-bar').style.display = 'flex';
-  updateTotaux();
-}
+  // ── BLOC CLIENT ──
+  y = 40;
+  doc.setFillColor(248,250,252);
+  doc.roundedRect(120,36,76,36,3,3,'F');
+  doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(13,41,51);
+  doc.text('DESTINATAIRE', 124, 43);
+  doc.setFont('helvetica','normal'); doc.setTextColor(40,40,40);
+  let yc = 50;
+  if(client)  { doc.setFont('helvetica','bold'); doc.text(client, 124, yc); yc+=5; doc.setFont('helvetica','normal'); }
+  if(contact) { doc.text(contact, 124, yc); yc+=5; }
+  if(email)   { doc.text(email, 124, yc);   yc+=5; }
+  if(tel)     { doc.text(tel, 124, yc);     yc+=5; }
+  if(adresse) { doc.text(adresse, 124, yc); }
 
-function updateTotaux() {
-  let ht = 0;
-  lignesDevis.forEach(l => {
-    const t = l.qte * l.puHT;
-    ht += t;
-    const el = document.getElementById('total-' + l.id);
-    if (el) el.textContent = t.toFixed(2) + ' \u20AC';
-  });
-  const tva = ht * 0.20;
-  const ttc = ht + tva;
-  document.getElementById('t-nb').textContent  = lignesDevis.length;
-  document.getElementById('t-ht').textContent  = ht.toFixed(2) + ' \u20AC';
-  document.getElementById('t-tva').textContent = tva.toFixed(2) + ' \u20AC';
-  document.getElementById('t-ttc').textContent = ttc.toFixed(2) + ' \u20AC';
-}
+  y = 80;
 
-function viderDevis() {
-  if (!confirm('Vider toutes les lignes du devis ?')) return;
-  lignesDevis = [];
-  renderDevis();
-}
-
-function showNotif(msg, ok) {
-  const n = document.getElementById('notif-import');
-  n.textContent = msg;
-  n.style.display = 'block';
-  n.style.background = ok ? '#ecfdf5' : '#fef9c3';
-  n.style.borderColor = ok ? '#059669' : '#f59e0b';
-  n.style.color       = ok ? '#065f46' : '#92400e';
-  setTimeout(() => n.style.display = 'none', 4000);
-}
-
-// ════ GENERATION PDF ════
-async function genererPDF() {
-  if (lignesDevis.length === 0) { alert('Ajoutez au moins une ligne.'); return; }
-
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-  const numero   = document.getElementById('d-numero').value   || 'DEV-2026';
-  const date     = document.getElementById('d-date').value     || '';
-  const client   = document.getElementById('d-client').value   || 'Client';
-  const contact  = document.getElementById('d-contact').value  || '';
-  const chantier = document.getElementById('d-chantier').value || '';
-  const comment  = document.getElementById('d-comment').value  || '';
-  const validite = document.getElementById('d-validite').value || '30';
-  const livrLabel = modelivraison === 'franco' ? 'Franco livraison (port inclus)' : 'D\u00E9part usine (port en sus)';
-
-  // HEADER
-  doc.setFillColor(13, 41, 51);
-  doc.rect(0, 0, 210, 32, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(24); doc.setFont('helvetica', 'bold');
-  doc.text('PLIALU', 14, 20);
-  doc.setFontSize(8); doc.setFont('helvetica', 'normal');
-  doc.setTextColor(180, 180, 180);
-  doc.text('Fa\u00E7onnage aluminium sur mesure \u2014 Enveloppe du b\u00E2timent', 14, 27);
-
-  // BADGE DEVIS
-  doc.setFillColor(232, 252, 105);
-  doc.roundedRect(148, 7, 52, 18, 3, 3, 'F');
-  doc.setTextColor(13, 41, 51);
-  doc.setFontSize(15); doc.setFont('helvetica', 'bold');
-  doc.text('DEVIS', 174, 17, { align: 'center' });
-  doc.setFontSize(8); doc.setFont('helvetica', 'normal');
-  doc.text(numero, 174, 23, { align: 'center' });
-
-  // INFO BLOC
-  let y = 42;
-  doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(13, 41, 51);
-  doc.text('DESTINATAIRE', 14, y);
-  doc.setFont('helvetica', 'normal'); doc.setTextColor(40, 40, 40);
-  doc.text(client, 14, y + 6);
-  if (contact) doc.text(contact, 14, y + 11);
-
-  if (chantier) {
-    doc.setFont('helvetica', 'bold'); doc.setTextColor(13, 41, 51);
-    doc.text('Chantier :', 14, y + 17);
-    doc.setFont('helvetica', 'normal'); doc.setTextColor(40, 40, 40);
-    doc.text(chantier, 38, y + 17);
-  }
-
-  doc.setFont('helvetica', 'bold'); doc.setTextColor(13, 41, 51);
-  doc.text('Date :',      140, y);
-  doc.text('Validit\u00E9 :', 140, y + 7);
-  doc.text('Livraison :', 140, y + 14);
-  doc.setFont('helvetica', 'normal'); doc.setTextColor(40, 40, 40);
-  doc.text(date,               162, y);
-  doc.text(validite + ' jours', 162, y + 7);
-  const livrLines = doc.splitTextToSize(livrLabel, 42);
-  doc.text(livrLines, 162, y + 14);
-
-  // TABLEAU
+  // ── TABLEAU LIGNES ──
   const rows = lignesDevis.map(l => [
     l.designation,
-    l.matiere || '-',
-    l.ral     || '-',
-    l.ep      || '-',
-    l.dvp ? String(l.dvp) : '-',
-    l.lg  ? String(l.lg)  : '-',
-    String(l.qte),
-    l.puHT.toFixed(2) + ' \u20AC',
-    (l.qte * l.puHT).toFixed(2) + ' \u20AC'
+    l.categorie,
+    l.matiere,
+    l.ral,
+    l.ep,
+    l.dvp ? l.dvp+'mm' : '',
+    l.lg  ? l.lg+'mm'  : '',
+    l.qte,
+    l.puHT.toFixed(2)+' €',
+    (l.qte * l.puHT).toFixed(2)+' €'
   ]);
 
   doc.autoTable({
-    head: [['D\u00E9signation', 'Mati\u00E8re', 'RAL', '\u00C9p.', 'DVP mm', 'Lg mm', 'Qt\u00E9', 'PU HT', 'Total HT']],
+    startY: y,
+    head: [['Désignation','Catégorie','Matière','RAL','Ép.','DVP','Long.','Qté','PU HT','Total HT']],
     body: rows,
-    startY: y + 26,
-    styles:               { fontSize: 8, cellPadding: 3 },
-    headStyles:           { fillColor: [13, 41, 51], textColor: 255, fontStyle: 'bold' },
-    alternateRowStyles:   { fillColor: [247, 253, 232] },
+    styles:      { fontSize:8, cellPadding:3 },
+    headStyles:  { fillColor:[13,41,51], textColor:[232,252,105], fontStyle:'bold' },
+    alternateRowStyles: { fillColor:[248,250,252] },
     columnStyles: {
-      0: { cellWidth: 50 },
-      7: { halign: 'right' },
-      8: { halign: 'right', fontStyle: 'bold' }
+      0: { cellWidth:35 },
+      1: { cellWidth:25 },
+      2: { cellWidth:18 },
+      3: { cellWidth:14 },
+      4: { cellWidth:12 },
+      5: { cellWidth:14 },
+      6: { cellWidth:14 },
+      7: { cellWidth:10 },
+      8: { cellWidth:18 },
+      9: { cellWidth:18 }
     }
   });
 
   let finalY = doc.lastAutoTable.finalY + 6;
 
-  // TOTAUX
-  const ht  = lignesDevis.reduce((s, l) => s + l.qte * l.puHT, 0);
+  // ── TOTAUX ──
+  const ht  = lignesDevis.reduce((s,l) => s + l.qte * l.puHT, 0);
   const tva = ht * 0.20;
   const ttc = ht + tva;
 
-  // Ligne HT
-  doc.setFillColor(240, 248, 250);
-  doc.rect(120, finalY, 76, 9, 'F');
-  doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(13, 41, 51);
-  doc.text('Total HT :', 124, finalY + 6);
-  doc.text(ht.toFixed(2) + ' \u20AC', 192, finalY + 6, { align: 'right' });
+  // Total HT
+  doc.setFillColor(232,252,105);
+  doc.rect(130, finalY, 66, 10, 'F');
+  doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(13,41,51);
+  doc.text('TOTAL HT :', 134, finalY+7);
+  doc.text(ht.toFixed(2)+' €', 192, finalY+7, {align:'right'});
+  finalY += 11;
 
-  // Ligne TVA
-  doc.setFillColor(248, 248, 248);
-  doc.rect(120, finalY + 10, 76, 9, 'F');
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
-  doc.text('TVA 20% :', 124, finalY + 16);
-  doc.text(tva.toFixed(2) + ' \u20AC', 192, finalY + 16, { align: 'right' });
+  // TVA
+  doc.setFillColor(248,250,252);
+  doc.rect(130, finalY, 66, 9, 'F');
+  doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
+  doc.text('TVA 20% :', 134, finalY+6);
+  doc.text(tva.toFixed(2)+' €', 192, finalY+6, {align:'right'});
+  finalY += 10;
 
-  // Ligne TTC accent
-  doc.setFillColor(232, 252, 105);
-  doc.rect(120, finalY + 20, 76, 12, 'F');
-  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(13, 41, 51);
-  doc.text('TOTAL TTC :', 124, finalY + 28);
-  doc.text(ttc.toFixed(2) + ' \u20AC', 192, finalY + 28, { align: 'right' });
+  // TTC
+  doc.setFillColor(13,41,51);
+  doc.rect(130, finalY, 66, 11, 'F');
+  doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(232,252,105);
+  doc.text('TOTAL TTC :', 134, finalY+8);
+  doc.text(ttc.toFixed(2)+' €', 192, finalY+8, {align:'right'});
+  finalY += 16;
 
-  finalY += 38;
-
-  // COMMENTAIRE
-  if (comment) {
-    doc.setFont('helvetica', 'italic'); doc.setFontSize(9); doc.setTextColor(80, 80, 80);
+  // ── COMMENTAIRE ──
+  if(comment){
+    doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(80,80,80);
     const lines = doc.splitTextToSize(comment, 180);
     doc.text(lines, 14, finalY);
     finalY += lines.length * 5 + 4;
   }
 
-  // FOOTER
+  // ── FOOTER ──
   const totalPages = doc.internal.getNumberOfPages();
-  for (let i = 1; i <= totalPages; i++) {
+  for(let i = 1; i <= totalPages; i++){
     doc.setPage(i);
-    doc.setFillColor(13, 41, 51);
-    doc.rect(0, 285, 210, 12, 'F');
-    doc.setFontSize(7); doc.setTextColor(180, 180, 180); doc.setFont('helvetica', 'normal');
-    doc.text('PLIALU \u2014 Fa\u00E7onnage aluminium sur mesure | Ghayth Benyoucef \u2014 Technico-commercial', 105, 292, { align: 'center' });
-    doc.setTextColor(232, 252, 105);
-    doc.text('Page ' + i + '/' + totalPages, 196, 292);
+    doc.setFillColor(13,41,51);
+    doc.rect(0,285,210,12,'F');
+    doc.setFontSize(7); doc.setTextColor(160,188,196); doc.setFont('helvetica','normal');
+    doc.text('PLIALU — Façonnage aluminium sur mesure | Ghayth Benyoucef — Technico-commercial', 105, 292, {align:'center'});
+    doc.setTextColor(232,252,105);
+    doc.text('Page '+i+'/'+totalPages, 196, 292);
   }
 
-  // FUSION PDF CLIENT
-  if (pdfBytes) {
+  // ── FUSION PDF CLIENT ──
+  if(pdfBytes){
     try {
       const { PDFDocument } = PDFLib;
       const devisBytes  = doc.output('arraybuffer');
       const devisDoc    = await PDFDocument.load(devisBytes);
       const clientDoc   = await PDFDocument.load(pdfBytes);
-      const clientPages = await devisDoc.copyPages(clientDoc, clientDoc.getPageIndices());
-      clientPages.forEach(p => devisDoc.addPage(p));
-      const mergedBytes = await devisDoc.save();
-      const blob = new Blob([mergedBytes], { type: 'application/pdf' });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      a.href = url; a.download = 'Devis_' + numero + '_avec_demande.pdf'; a.click();
+      const pages       = await devisDoc.copyPages(clientDoc, clientDoc.getPageIndices());
+      pages.forEach(p => devisDoc.addPage(p));
+      const merged = await devisDoc.save();
+      const blob   = new Blob([merged], {type:'application/pdf'});
+      const url    = URL.createObjectURL(blob);
+      const a      = document.createElement('a');
+      a.href = url; a.download = 'Devis_'+numero+'_avec_demande.pdf'; a.click();
       URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch(err){
       console.error(err);
-      alert('Fusion PDF \u00E9chou\u00E9e — t\u00E9l\u00E9chargement du devis seul.');
-      doc.save('Devis_' + numero + '.pdf');
+      alert('Fusion PDF échouée — téléchargement du devis seul.');
+      doc.save('Devis_'+numero+'.pdf');
     }
   } else {
-    doc.save('Devis_' + numero + '.pdf');
+    doc.save('Devis_'+numero+'.pdf');
   }
 }
-
-// ════ INIT ════
-document.getElementById('d-date').value    = new Date().toISOString().split('T')[0];
-document.getElementById('d-numero').value  = 'DEV-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
-renderDevis();
-
-// Import auto si lignes en attente
-window.addEventListener('load', () => {
-  const stored = localStorage.getItem('plialu-devis');
-  if (stored) {
-    const n = JSON.parse(stored);
-    if (n.length > 0) showNotif(n.length + ' ligne(s) en attente depuis la calculette — cliquez sur \u00AB Recharger \u00BB.', true);
-  }
-});
 </script>
 </body>
 </html>
