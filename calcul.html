@@ -130,8 +130,9 @@ input::placeholder{color:#b0bec5}
       <input type="text" id="ral-calc" placeholder="ex: 9006, Brut, Anodisé...">
     </div>
     <div>
-      <label>Prix matière (€/kg)</label>
-      <input type="number" id="prix-mat" value="4.50" step="0.01">
+      <!-- ✅ CORRECTION : €/m² au lieu de €/kg -->
+      <label>Prix matière (€/m²)</label>
+      <input type="number" id="prix-mat" value="18.54" step="0.01">
     </div>
   </div>
 </div>
@@ -211,7 +212,7 @@ input::placeholder{color:#b0bec5}
   <div class="card-title">5 — Coefficients</div>
   <div class="coef-section">
     <div class="coef-bloc coef-mat">
-      <label>Coeff Mat</label>
+      <label>Coeff Chute</label>
       <input type="number" id="coef-chute" value="0.9" step="0.01">
       <div class="coef-desc">Coefficient de chute matière</div>
     </div>
@@ -317,8 +318,8 @@ const MATIERES = {
   autre:     { label:'Autre',     epaisseurs:['10/10','15/10','20/10','25/10','30/10'] }
 };
 
-const DENSITE   = { aluminium:2.7, acier:7.85, inox:8.0, autre:1.0 };
-const PRIX_BASE = { aluminium:4.50, acier:1.20, inox:6.00, autre:0 };
+// ✅ Prix de base en €/m² (plus de densité nécessaire)
+const PRIX_BASE = { aluminium:18.54, acier:12.00, inox:28.00, autre:0 };
 
 // ============================================================
 // ÉTAT
@@ -361,7 +362,7 @@ function setMatiere(key, btn){
   document.querySelectorAll('#mat-btns .mat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   buildEpBtns();
-  document.getElementById('prix-mat').value = PRIX_BASE[key] ?? 4.50;
+  document.getElementById('prix-mat').value = PRIX_BASE[key] ?? 18.54;
 }
 
 function setEpaisseur(ep, btn){
@@ -371,10 +372,10 @@ function setEpaisseur(ep, btn){
 }
 
 // ============================================================
-// CALCUL
+// CALCUL — ✅ CORRIGÉ : prix en €/m² comme l'Excel
 // ============================================================
 function calculer(){
-  const prixMat = parseFloat(document.getElementById('prix-mat').value)  || 4.50;
+  const prixMat = parseFloat(document.getElementById('prix-mat').value)  || 18.54;
   const dvp     = parseFloat(document.getElementById('dvp').value)       || 0;
   const lg      = parseFloat(document.getElementById('longueur').value)  || 0;
 
@@ -396,24 +397,27 @@ function calculer(){
   const coefPort  = parseFloat(document.getElementById('coef-port').value)  || 0.9;
   const coefMarge = parseFloat(document.getElementById('coef-marge').value) || 0.65;
 
-  // Matière
-  const epMm    = parseFloat(epaisseurActive) / 10;
-  const densite = DENSITE[matiereActive] || 2.7;
-  const surface = (dvp / 1000) * (lg / 1000);
-  const poids   = surface * (epMm / 1000) * densite * 1000;
-  const matBrut = poids * prixMat;
+  // ✅ MATIÈRE — calcul en €/m² (identique à l'Excel)
+  // Surface en m²
+  const surface  = (dvp / 1000) * (lg / 1000);
+  // Matière brute = surface × prix €/m²
+  const matBrut  = surface * prixMat;
+  // Matière + chute = matBrut / coef chute
   const matChute = matBrut / coefChute;
 
   // MO
   const tempsTotalSec = (nbCis * tCis) + (nbPli * tPli) + (nbPoinc * tPoinc);
   const moEuros       = (tempsTotalSec / 3600) * tauxMO;
 
-  // ST
+  // Sous-traitance
   const stTotal = (stLaquage > 0 ? surface * stLaquage : 0) + stSoudure + stTransp;
 
-  // Prix revient & PV
-  const prHT    = matChute + moEuros + stTotal;
+  // Prix de revient
+  const prHT = matChute + moEuros + stTotal;
+
+  // PV HT = PR HT / (coef port × coef marge)
   const pvCalc  = prHT / (coefPort * coefMarge);
+  // PV mini = (matChute + stTotal) × 2
   const pvMini  = (matChute + stTotal) * 2.0;
   const pvFinal = Math.max(pvCalc, pvMini);
 
@@ -431,14 +435,14 @@ function calculer(){
     ? tempsTotalSec + 's'
     : tMin + 'min ' + tSec + 's';
 
-  // Résultats
-  document.getElementById('r-mat').textContent      = matChute.toFixed(2) + ' €';
-  document.getElementById('r-mo').textContent       = moEuros.toFixed(2)  + ' €';
-  document.getElementById('r-st').textContent       = stTotal.toFixed(2)  + ' €';
-  document.getElementById('r-pr').textContent       = prHT.toFixed(2)     + ' €';
-  document.getElementById('r-pv').textContent       = pvFinal.toFixed(2)  + ' €';
-  document.getElementById('r-m2').textContent       = prixM2.toFixed(2)   + ' €/m²';
-  document.getElementById('r-mgb').textContent      = (mgb * 100).toFixed(1) + ' %';
+  // Affichage résultats
+  document.getElementById('r-mat').textContent      = matChute.toFixed(2)      + ' €';
+  document.getElementById('r-mo').textContent       = moEuros.toFixed(2)       + ' €';
+  document.getElementById('r-st').textContent       = stTotal.toFixed(2)       + ' €';
+  document.getElementById('r-pr').textContent       = prHT.toFixed(2)          + ' €';
+  document.getElementById('r-pv').textContent       = pvFinal.toFixed(2)       + ' €';
+  document.getElementById('r-m2').textContent       = prixM2.toFixed(2)        + ' €/m²';
+  document.getElementById('r-mgb').textContent      = (mgb * 100).toFixed(1)   + ' %';
   document.getElementById('r-coef-mat').textContent = coefSurMat.toFixed(3);
 
   // Badge marge
