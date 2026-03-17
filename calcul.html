@@ -8,7 +8,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1a2e38;min-height:100vh}
 
-/* NAV */
 .nav{background:#0d2933;padding:0 24px;display:flex;align-items:center;gap:8px;height:52px;position:sticky;top:0;z-index:100}
 .nav-logo{color:#e8fc69;font-weight:800;font-size:17px;margin-right:16px;letter-spacing:1px;display:flex;align-items:center;gap:8px}
 .nav-logo span{background:#e8fc69;color:#0d2933;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
@@ -16,24 +15,19 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1a2e38;min-heig
 .nav-btn:hover{color:#fff}
 .nav-btn.active{background:#e8fc69;color:#0d2933}
 
-/* PAGE */
 .page{max-width:900px;margin:28px auto;padding:0 16px}
 
-/* CARD */
 .card{background:#fff;border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
 .card-title{font-size:13px;font-weight:800;color:#1a2e38;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e8fc69}
 
-/* GRID */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
-/* FORM */
 label{display:block;font-size:10px;font-weight:700;color:#6b7a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
 input,select{width:100%;padding:10px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:14px;background:#fff;color:#1a2e38;transition:border .2s}
 input:focus,select:focus{outline:none;border-color:#0d2933}
 input::placeholder{color:#b0bec5}
 
-/* BUTTONS GROUPE */
 .btn-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .cat-btn{padding:8px 16px;border:2px solid #dde3e8;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;background:#f8fafc;color:#1a2e38;transition:.2s}
 .cat-btn:hover{border-color:#0d2933}
@@ -47,11 +41,6 @@ input::placeholder{color:#b0bec5}
 .ep-btn:hover{border-color:#0d2933}
 .ep-btn.active{background:#e8fc69;color:#0d2933;border-color:#0d2933}
 
-/* SOUS-TYPE */
-.sous-type-lbl{font-size:10px;font-weight:700;color:#6b7a80;text-transform:uppercase;letter-spacing:.5px;margin-top:12px;margin-bottom:4px}
-.sous-type-empty{font-size:12px;color:#b0bec5;font-style:italic}
-
-/* MO BLOCS */
 .mo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
 .mo-bloc{background:#f8fafc;border-radius:10px;padding:14px;border:1.5px solid #e2e8f0}
 .mo-title{font-size:11px;font-weight:700;color:#4a6572;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -59,7 +48,6 @@ input::placeholder{color:#b0bec5}
 .mo-row label{font-size:10px}
 .mo-row input{font-size:12px;padding:7px 9px}
 
-/* COEF */
 .coef-section{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:4px}
 .coef-bloc{border-radius:10px;padding:16px;text-align:center}
 .coef-bloc label{font-size:11px;font-weight:800;margin-bottom:8px;display:block;text-transform:uppercase;letter-spacing:.5px}
@@ -72,7 +60,6 @@ input::placeholder{color:#b0bec5}
 .coef-marge{background:#dcfce7;border:2px solid #86efac}
 .coef-marge label,.coef-marge input,.coef-marge .coef-desc{color:#14532d}
 
-/* RÉSULTATS */
 .result-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px}
 .result-box{background:#f8fafc;border-radius:8px;padding:14px;text-align:center;border:1.5px solid #e2e8f0}
 .result-box .lbl{font-size:10px;font-weight:700;color:#6b7a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
@@ -83,14 +70,11 @@ input::placeholder{color:#b0bec5}
 .result-box.green{background:#dcfce7;border-color:#86efac}
 .result-box.green .val{color:#166534}
 
-/* BADGE DELTA */
 #r-delta-badge{border-radius:8px;padding:10px 16px;text-align:center;font-weight:700;font-size:13px;margin-top:4px;display:none}
 
-/* BTN CALCULER */
 .btn-calc{background:#e8fc69;color:#0d2933;border:none;border-radius:8px;padding:12px 28px;font-size:15px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px;margin-top:16px}
 .btn-calc:hover{background:#d4f040;transform:translateY(-1px)}
 
-/* AJOUTER AU DEVIS */
 .add-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .btn-add{background:#e8fc69;color:#0d2933;border:none;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
 .btn-add:hover{background:#d4f040}
@@ -103,9 +87,10 @@ input::placeholder{color:#b0bec5}
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
-  <a href="https://ghayth-plialu.github.io/" style="text-decoration:none;"><div class="nav-logo"><span>o</span> PLIALU</div></a>
+  <a href="https://ghayth-plialu.github.io/" style="text-decoration:none;">
+    <div class="nav-logo"><span>o</span> PLIALU</div>
+  </a>
   <a class="nav-btn active" href="calcul.html">Calculette</a>
   <a class="nav-btn" href="devis.html">Devis</a>
 </nav>
@@ -124,206 +109,192 @@ input::placeholder{color:#b0bec5}
   </div>
 </div>
 
-<script>
-const CATEGORIES = {
-  bavette:    { label:'Bavette'    },
-  couvertine: { label:'Couvertine' },
-  accessoire: { label:'Accessoire' },
-  rails:      { label:'Rails'      },
-  autres:     { label:'Autres'     }
-};
+<!-- 2 — MATIÈRE & ÉPAISSEUR -->
+<div class="card">
+  <div class="card-title">2 — Matière & Épaisseur</div>
 
-function setCategorie(key, btn) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-</script>
+  <label>Matière</label>
+  <div class="btn-group" id="mat-btns" style="margin-bottom:16px">
+    <button class="mat-btn active" onclick="setMatiere('aluminium',this)">Aluminium</button>
+    <button class="mat-btn" onclick="setMatiere('acier',this)">Acier</button>
+    <button class="mat-btn" onclick="setMatiere('inox',this)">Inox</button>
+    <button class="mat-btn" onclick="setMatiere('autre',this)">Autre</button>
+  </div>
 
-  <!-- 2 — MATIÈRE & ÉPAISSEUR -->
-  <div class="card">
-    <div class="card-title">2 — Matière & Épaisseur</div>
+  <label>Épaisseur</label>
+  <div class="btn-group" id="ep-btns" style="margin-bottom:16px"></div>
 
-    <label>Matière</label>
-    <div class="btn-group" id="mat-btns" style="margin-bottom:16px">
-      <button class="mat-btn active" onclick="setMatiere('aluminium',this)">Aluminium</button>
-      <button class="mat-btn" onclick="setMatiere('acier',this)">Acier</button>
-      <button class="mat-btn" onclick="setMatiere('inox',this)">Inox</button>
+  <div class="grid2">
+    <div>
+      <label>RAL / Finition</label>
+      <input type="text" id="ral-calc" placeholder="ex: 9006, Brut, Anodisé...">
     </div>
+    <div>
+      <label>Prix matière (€/kg)</label>
+      <input type="number" id="prix-mat" value="4.50" step="0.01">
+    </div>
+  </div>
+</div>
 
-    <label>Épaisseur</label>
-    <div class="btn-group" id="ep-btns" style="margin-bottom:16px"></div>
+<!-- 3 — DIMENSIONS & MO -->
+<div class="card">
+  <div class="card-title">3 — Dimensions & Main d'œuvre</div>
 
-    <div class="grid2">
-      <div>
-        <label>RAL / Finition</label>
-        <input type="text" id="ral-calc" placeholder="ex: 9006, Brut, Anodisé...">
+  <div class="grid2" style="margin-bottom:16px">
+    <div>
+      <label>DVP — Développé (mm)</label>
+      <input type="number" id="dvp" placeholder="ex: 300">
+    </div>
+    <div>
+      <label>Longueur (mm)</label>
+      <input type="number" id="longueur" value="3000">
+    </div>
+  </div>
+
+  <div class="mo-grid">
+    <div class="mo-bloc">
+      <div class="mo-title">⏱ Cisaillage</div>
+      <div class="mo-row">
+        <div><label>NB Passes</label><input type="number" id="nb-cis" value="1" min="0"></div>
+        <div><label>Tps/Passe (s)</label><input type="number" id="t-cis" value="45" min="0"></div>
       </div>
-      <div>
-        <label>Prix matière (€/m²)</label>
-        <input type="number" id="prix-mat" value="22.50" step="0.01">
+    </div>
+    <div class="mo-bloc">
+      <div class="mo-title">⏱ Pliage</div>
+      <div class="mo-row">
+        <div><label>NB Passes</label><input type="number" id="nb-pli" value="2" min="0"></div>
+        <div><label>Tps/Passe (s)</label><input type="number" id="t-pli" value="30" min="0"></div>
+      </div>
+    </div>
+    <div class="mo-bloc">
+      <div class="mo-title">⏱ Poinçonnage</div>
+      <div class="mo-row">
+        <div><label>NB Passes</label><input type="number" id="nb-poinc" value="0" min="0"></div>
+        <div><label>Tps/Passe (s)</label><input type="number" id="t-poinc" value="25" min="0"></div>
       </div>
     </div>
   </div>
 
-  <!-- 3 — DIMENSIONS & MO -->
-  <div class="card">
-    <div class="card-title">3 — Dimensions & Main d'œuvre</div>
-
-    <div class="grid2" style="margin-bottom:16px">
-      <div>
-        <label>DVP — Développé (mm)</label>
-        <input type="number" id="dvp" placeholder="ex: 300">
-      </div>
-      <div>
-        <label>Longueur (mm)</label>
-        <input type="number" id="longueur" value="3000">
-      </div>
+  <div class="grid2">
+    <div>
+      <label>Taux horaire MO (€/h)</label>
+      <input type="number" id="taux-mo" value="60" step="0.5">
     </div>
-
-    <div class="mo-grid">
-      <div class="mo-bloc">
-        <div class="mo-title">⏱ Cisaillage</div>
-        <div class="mo-row">
-          <div><label>NB Passes</label><input type="number" id="nb-cis" value="1" min="0"></div>
-          <div><label>Tps/Passe (s)</label><input type="number" id="t-cis" value="45" min="0"></div>
-        </div>
-      </div>
-      <div class="mo-bloc">
-        <div class="mo-title">⏱ Pliage</div>
-        <div class="mo-row">
-          <div><label>NB Passes</label><input type="number" id="nb-pli" value="2" min="0"></div>
-          <div><label>Tps/Passe (s)</label><input type="number" id="t-pli" value="30" min="0"></div>
-        </div>
-      </div>
-      <div class="mo-bloc">
-        <div class="mo-title">⏱ Poinçonnage</div>
-        <div class="mo-row">
-          <div><label>NB Passes</label><input type="number" id="nb-poinc" value="0" min="0"></div>
-          <div><label>Tps/Passe (s)</label><input type="number" id="t-poinc" value="25" min="0"></div>
-        </div>
-      </div>
+    <div>
+      <label>Temps total calculé</label>
+      <input type="text" id="r-temps" readonly placeholder="—" style="background:#f8fafc;color:#0d2933;font-weight:700">
     </div>
+  </div>
+</div>
 
-    <div class="grid2">
-      <div>
-        <label>Taux horaire MO (€/h)</label>
-        <input type="number" id="taux-mo" value="60" step="0.5">
-      </div>
-      <div>
-        <label>Temps total calculé</label>
-        <input type="text" id="r-temps" readonly placeholder="—" style="background:#f8fafc;color:#0d2933;font-weight:700">
-      </div>
+<!-- 4 — SOUS-TRAITANCE -->
+<div class="card" style="border:2px solid #e8fc69">
+  <div class="card-title">4 — Sous-traitance</div>
+  <div class="grid3">
+    <div>
+      <label>Laquage (€/m²)</label>
+      <input type="number" id="st-laquage" value="0" step="0.01">
+    </div>
+    <div>
+      <label>Soudure (€ fixe)</label>
+      <input type="number" id="st-soudure" value="0" step="0.01">
+    </div>
+    <div>
+      <label>Transport (€ fixe)</label>
+      <input type="number" id="st-transp" value="0" step="0.01">
+    </div>
+  </div>
+</div>
+
+<!-- 5 — COEFFICIENTS -->
+<div class="card">
+  <div class="card-title">5 — Coefficients</div>
+  <div class="coef-section">
+    <div class="coef-bloc coef-mat">
+      <label>Coeff Mat</label>
+      <input type="number" id="coef-chute" value="0.9" step="0.01">
+      <div class="coef-desc">Coefficient de chute matière</div>
+    </div>
+    <div class="coef-bloc coef-transport">
+      <label>Coeff Transport</label>
+      <input type="number" id="coef-port" value="0.9" step="0.01">
+      <div class="coef-desc">Port de frais & frais fixes</div>
+    </div>
+    <div class="coef-bloc coef-marge">
+      <label>Coeff Marge</label>
+      <input type="number" id="coef-marge" value="0.65" step="0.01">
+      <div class="coef-desc">Objectif de marge brute</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6 — RÉSULTATS -->
+<div class="card">
+  <div class="card-title">6 — Résultats</div>
+
+  <div class="result-grid">
+    <div class="result-box">
+      <div class="lbl">Matière + Chute</div>
+      <div class="val" id="r-mat">—</div>
+    </div>
+    <div class="result-box">
+      <div class="lbl">Main d'œuvre</div>
+      <div class="val" id="r-mo">—</div>
+    </div>
+    <div class="result-box">
+      <div class="lbl">Sous-traitance</div>
+      <div class="val" id="r-st">—</div>
+    </div>
+    <div class="result-box">
+      <div class="lbl">Prix de revient</div>
+      <div class="val" id="r-pr">—</div>
     </div>
   </div>
 
-  <!-- 4 — SOUS-TRAITANCE -->
-  <div class="card" style="border:2px solid #e8fc69">
-    <div class="card-title">4 — Sous-traitance</div>
-    <div class="grid3">
-      <div>
-        <label>Laquage (€/m²)</label>
-        <input type="number" id="st-laquage" value="0" step="0.01">
-      </div>
-      <div>
-        <label>Soudure (€ fixe)</label>
-        <input type="number" id="st-soudure" value="0" step="0.01">
-      </div>
-      <div>
-        <label>Transport (€ fixe)</label>
-        <input type="number" id="st-transp" value="0" step="0.01">
-      </div>
+  <div class="result-grid">
+    <div class="result-box highlight">
+      <div class="lbl">PV HT</div>
+      <div class="val" id="r-pv">—</div>
+    </div>
+    <div class="result-box">
+      <div class="lbl">Prix / m²</div>
+      <div class="val" id="r-m2">—</div>
+    </div>
+    <div class="result-box green">
+      <div class="lbl">Marge brute</div>
+      <div class="val" id="r-mgb">—</div>
+    </div>
+    <div class="result-box">
+      <div class="lbl">Coeff / Mat</div>
+      <div class="val" id="r-coef-mat">—</div>
     </div>
   </div>
 
-  <!-- 5 — COEFFICIENTS -->
-  <div class="card">
-    <div class="card-title">5 — Coefficients</div>
-    <div class="coef-section">
-      <div class="coef-bloc coef-mat">
-        <label>Coeff Mat</label>
-        <input type="number" id="coef-chute" value="0.9" step="0.01">
-        <div class="coef-desc">Coefficient de chute matière</div>
-      </div>
-      <div class="coef-bloc coef-transport">
-        <label>Coeff Transport</label>
-        <input type="number" id="coef-port" value="0.9" step="0.01">
-        <div class="coef-desc">Port de frais & frais fixes</div>
-      </div>
-      <div class="coef-bloc coef-marge">
-        <label>Coeff Marge</label>
-        <input type="number" id="coef-marge" value="0.65" step="0.01">
-        <div class="coef-desc">Objectif de marge brute</div>
-      </div>
+  <div id="r-delta-badge"></div>
+
+  <button class="btn-calc" onclick="calculer()">⚡ Calculer</button>
+</div>
+
+<!-- 7 — AJOUTER AU DEVIS -->
+<div class="card">
+  <div class="card-title">7 — Ajouter au devis</div>
+  <div class="add-grid">
+    <div>
+      <label>Désignation</label>
+      <input type="text" id="add-desig" placeholder="Description de la pièce">
+    </div>
+    <div>
+      <label>RAL affiché sur devis</label>
+      <input type="text" id="add-ral" placeholder="ex: RAL 9006">
+    </div>
+    <div>
+      <label>Quantité</label>
+      <input type="number" id="add-qte" value="1" min="1">
     </div>
   </div>
-
-  <!-- 6 — RÉSULTATS -->
-  <div class="card">
-    <div class="card-title">6 — Résultats</div>
-
-    <div class="result-grid">
-      <div class="result-box">
-        <div class="lbl">Matière + Chute</div>
-        <div class="val" id="r-mat">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Main d'œuvre</div>
-        <div class="val" id="r-mo">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Sous-traitance</div>
-        <div class="val" id="r-st">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Prix de revient</div>
-        <div class="val" id="r-pr">—</div>
-      </div>
-    </div>
-
-    <div class="result-grid">
-      <div class="result-box highlight">
-        <div class="lbl">PV HT</div>
-        <div class="val" id="r-pv">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Prix / m²</div>
-        <div class="val" id="r-m2">—</div>
-      </div>
-      <div class="result-box green">
-        <div class="lbl">Marge brute</div>
-        <div class="val" id="r-mgb">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Coeff / Mat</div>
-        <div class="val" id="r-coef-mat">—</div>
-      </div>
-    </div>
-
-    <div id="r-delta-badge"></div>
-
-    <button class="btn-calc" onclick="calculer()">⚡ Calculer</button>
-  </div>
-
-  <!-- 7 — AJOUTER AU DEVIS -->
-  <div class="card">
-    <div class="card-title">7 — Ajouter au devis</div>
-    <div class="add-grid">
-      <div>
-        <label>Désignation</label>
-        <input type="text" id="add-desig" placeholder="Description de la pièce">
-      </div>
-      <div>
-        <label>RAL affiché sur devis</label>
-        <input type="text" id="add-ral" placeholder="ex: RAL 9006">
-      </div>
-      <div>
-        <label>Quantité</label>
-        <input type="number" id="add-qte" value="1" min="1">
-      </div>
-    </div>
-    <button class="btn-add" onclick="ajouterAuDevis()">+ Ajouter au devis</button>
-    <div class="msg-ok" id="msg-ok">✅ Ligne ajoutée au devis avec succès !</div>
-  </div>
+  <button class="btn-add" onclick="ajouterAuDevis()">+ Ajouter au devis</button>
+  <div class="msg-ok" id="msg-ok">✅ Ligne ajoutée au devis avec succès !</div>
+</div>
 
 </div><!-- end page -->
 
@@ -332,28 +303,27 @@ function setCategorie(key, btn) {
 // DONNÉES
 // ============================================================
 const CATEGORIES = {
-  bavette:     { label:'Bavette',               souTypes:[] },
-  acc_bavette: { label:'Accessoire Bavette',    souTypes:[] },
-  couvertine:  { label:'Couvertine',            souTypes:[] },
-  acc_couv:    { label:'Couvertine Accessoire', souTypes:[] },
-  depart:      { label:'Départ',                souTypes:[] },
-  autres:      { label:'Autres',                souTypes:[] }
+  bavette:    { label:'Bavette'    },
+  couvertine: { label:'Couvertine' },
+  accessoire: { label:'Accessoire' },
+  rails:      { label:'Rails'      },
+  autres:     { label:'Autres'     }
 };
 
 const MATIERES = {
-  aluminium:{ label:'Aluminium', epaisseurs:['10/10','15/10','20/10','25/10','30/10'] },
-  acier:    { label:'Acier',     epaisseurs:['10/10','15/10','20/10','25/10','30/10'] },
-  inox:     { label:'Inox',      epaisseurs:['10/10','15/10','20/10','25/10','30/10'] }
+  aluminium: { label:'Aluminium', epaisseurs:['10/10','15/10','20/10','25/10','30/10'] },
+  acier:     { label:'Acier',     epaisseurs:['10/10','15/10','20/10','25/10','30/10'] },
+  inox:      { label:'Inox',      epaisseurs:['10/10','15/10','20/10','25/10','30/10'] },
+  autre:     { label:'Autre',     epaisseurs:['10/10','15/10','20/10','25/10','30/10'] }
 };
 
-const DENSITE   = { aluminium:2.7, acier:7.85, inox:8.0 };
-const PRIX_BASE = { aluminium:4.50, acier:1.20, inox:6.00 };
+const DENSITE   = { aluminium:2.7, acier:7.85, inox:8.0, autre:1.0 };
+const PRIX_BASE = { aluminium:4.50, acier:1.20, inox:6.00, autre:0 };
 
 // ============================================================
 // ÉTAT
 // ============================================================
 let categorieActive = 'bavette';
-let sousTypeActif   = '';
 let matiereActive   = 'aluminium';
 let epaisseurActive = '15/10';
 let dernierResultat = null;
@@ -363,28 +333,15 @@ let dernierResultat = null;
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
   buildEpBtns();
-  buildSousBtns();
 });
 
 // ============================================================
 // BUILDERS
 // ============================================================
-function buildSousBtns(){
-  const container = document.getElementById('sous-btns');
-  const st = CATEGORIES[categorieActive]?.souTypes || [];
-  if(!st.length){
-    container.innerHTML = '<span class="sous-type-empty">Aucun sous-type</span>';
-    return;
-  }
-  container.innerHTML = st.map(s =>
-    `<button class="cat-btn" onclick="setSousType('${s}',this)">${s}</button>`
-  ).join('');
-}
-
 function buildEpBtns(){
   document.getElementById('ep-btns').innerHTML =
     MATIERES[matiereActive].epaisseurs.map(ep =>
-      `<button class="ep-btn${ep===epaisseurActive?' active':''}"
+      `<button class="ep-btn${ep === epaisseurActive ? ' active' : ''}"
         onclick="setEpaisseur('${ep}',this)">${ep}</button>`
     ).join('');
 }
@@ -394,22 +351,14 @@ function buildEpBtns(){
 // ============================================================
 function setCategorie(key, btn){
   categorieActive = key;
-  sousTypeActif   = '';
-  document.querySelectorAll('#cat-btns .cat-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  buildSousBtns();
-}
-
-function setSousType(st, btn){
-  sousTypeActif = st;
-  document.querySelectorAll('#sous-btns .cat-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#cat-btns .cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
 
 function setMatiere(key, btn){
   matiereActive   = key;
   epaisseurActive = MATIERES[key].epaisseurs[1] || MATIERES[key].epaisseurs[0];
-  document.querySelectorAll('#mat-btns .mat-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#mat-btns .mat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   buildEpBtns();
   document.getElementById('prix-mat').value = PRIX_BASE[key] ?? 4.50;
@@ -417,7 +366,7 @@ function setMatiere(key, btn){
 
 function setEpaisseur(ep, btn){
   epaisseurActive = ep;
-  document.querySelectorAll('#ep-btns .ep-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#ep-btns .ep-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
 
@@ -425,19 +374,19 @@ function setEpaisseur(ep, btn){
 // CALCUL
 // ============================================================
 function calculer(){
-  const prixMat  = parseFloat(document.getElementById('prix-mat').value)  || 4.50;
-  const dvp      = parseFloat(document.getElementById('dvp').value)       || 0;
-  const lg       = parseFloat(document.getElementById('longueur').value)  || 0;
+  const prixMat = parseFloat(document.getElementById('prix-mat').value)  || 4.50;
+  const dvp     = parseFloat(document.getElementById('dvp').value)       || 0;
+  const lg      = parseFloat(document.getElementById('longueur').value)  || 0;
 
   if(!dvp || !lg){ alert('Renseignez le DVP et la longueur.'); return; }
 
-  const nbCis    = parseFloat(document.getElementById('nb-cis').value)    || 0;
-  const tCis     = parseFloat(document.getElementById('t-cis').value)     || 45;
-  const nbPli    = parseFloat(document.getElementById('nb-pli').value)    || 0;
-  const tPli     = parseFloat(document.getElementById('t-pli').value)     || 30;
-  const nbPoinc  = parseFloat(document.getElementById('nb-poinc').value)  || 0;
-  const tPoinc   = parseFloat(document.getElementById('t-poinc').value)   || 25;
-  const tauxMO   = parseFloat(document.getElementById('taux-mo').value)   || 60;
+  const nbCis   = parseFloat(document.getElementById('nb-cis').value)   || 0;
+  const tCis    = parseFloat(document.getElementById('t-cis').value)    || 45;
+  const nbPli   = parseFloat(document.getElementById('nb-pli').value)   || 0;
+  const tPli    = parseFloat(document.getElementById('t-pli').value)    || 30;
+  const nbPoinc = parseFloat(document.getElementById('nb-poinc').value) || 0;
+  const tPoinc  = parseFloat(document.getElementById('t-poinc').value)  || 25;
+  const tauxMO  = parseFloat(document.getElementById('taux-mo').value)  || 60;
 
   const stLaquage = parseFloat(document.getElementById('st-laquage').value) || 0;
   const stSoudure = parseFloat(document.getElementById('st-soudure').value) || 0;
@@ -447,7 +396,7 @@ function calculer(){
   const coefPort  = parseFloat(document.getElementById('coef-port').value)  || 0.9;
   const coefMarge = parseFloat(document.getElementById('coef-marge').value) || 0.65;
 
-  // Calcul matière
+  // Matière
   const epMm    = parseFloat(epaisseurActive) / 10;
   const densite = DENSITE[matiereActive] || 2.7;
   const surface = (dvp / 1000) * (lg / 1000);
@@ -463,10 +412,10 @@ function calculer(){
   const stTotal = (stLaquage > 0 ? surface * stLaquage : 0) + stSoudure + stTransp;
 
   // Prix revient & PV
-  const prHT    = matChute + moEuros + stTotal;
-  const pvCalc  = prHT / (coefPort * coefMarge);
-  const pvMini  = (matChute + stTotal) * 2.0;
-  const pvFinal = Math.max(pvCalc, pvMini);
+  const prHT   = matChute + moEuros + stTotal;
+  const pvCalc = prHT / (coefPort * coefMarge);
+  const pvMini = (matChute + stTotal) * 2.0;
+  const pvFinal= Math.max(pvCalc, pvMini);
 
   // Indicateurs
   const prixM2     = surface > 0 ? pvFinal / surface : 0;
@@ -475,25 +424,24 @@ function calculer(){
 
   dernierResultat = { matChute, moEuros, stTotal, prHT, pvHT:pvFinal, prixM2, coefSurMat, mgb, dvp, lg, surface };
 
-  // Affichage temps
+  // Temps
   const tMin = Math.floor(tempsTotalSec / 60);
   const tSec = tempsTotalSec % 60;
   document.getElementById('r-temps').value = tempsTotalSec < 60 ? tempsTotalSec+'s' : tMin+'min '+tSec+'s';
 
   // Résultats
-  document.getElementById('r-mat').textContent     = matChute.toFixed(2)+' €';
-  document.getElementById('r-mo').textContent      = moEuros.toFixed(2)+' €';
-  document.getElementById('r-st').textContent      = stTotal.toFixed(2)+' €';
-  document.getElementById('r-pr').textContent      = prHT.toFixed(2)+' €';
-  document.getElementById('r-pv').textContent      = pvFinal.toFixed(2)+' €';
-  document.getElementById('r-m2').textContent      = prixM2.toFixed(2)+' €/m²';
-  document.getElementById('r-mgb').textContent     = (mgb*100).toFixed(1)+' %';
-  document.getElementById('r-coef-mat').textContent= coefSurMat.toFixed(3);
+  document.getElementById('r-mat').textContent      = matChute.toFixed(2)+' €';
+  document.getElementById('r-mo').textContent       = moEuros.toFixed(2)+' €';
+  document.getElementById('r-st').textContent       = stTotal.toFixed(2)+' €';
+  document.getElementById('r-pr').textContent       = prHT.toFixed(2)+' €';
+  document.getElementById('r-pv').textContent       = pvFinal.toFixed(2)+' €';
+  document.getElementById('r-m2').textContent       = prixM2.toFixed(2)+' €/m²';
+  document.getElementById('r-mgb').textContent      = (mgb*100).toFixed(1)+' %';
+  document.getElementById('r-coef-mat').textContent = coefSurMat.toFixed(3);
 
-  // Badge delta marge
+  // Badge marge
   const badge = document.getElementById('r-delta-badge');
   const delta = pvFinal - matChute;
-  badge.style.display = 'block';
   if(mgb >= 0.45){
     badge.style.cssText = 'display:block;border-radius:8px;padding:10px 16px;text-align:center;font-weight:700;font-size:13px;margin-top:8px;background:#dcfce7;color:#166534';
   } else if(mgb >= 0.35){
@@ -503,44 +451,8 @@ function calculer(){
   }
   badge.textContent = `Marge brute : ${(mgb*100).toFixed(1)}% — Delta mat : ${delta.toFixed(2)} €`;
 
-  // Pré-remplir ajout devis
-  const mat  = matiereActive.charAt(0).toUpperCase() + matiereActive.slice(1);
-  const ral  = document.getElementById('ral-calc').value;
-  const cat  = CATEGORIES[categorieActive]?.label || '';
-  document.getElementById('add-desig').value = `${cat} ${mat} ${epaisseurActive}${ral?' - '+ral:''} - L${(lg/1000).toFixed(2)}m`;
-  document.getElementById('add-ral').value   = ral;
-  document.getElementById('add-qte').value   = 1;
-}
-
-// ============================================================
-// AJOUTER AU DEVIS (localStorage)
-// ============================================================
-function ajouterAuDevis(){
-  if(!dernierResultat){ alert('Lancez d\'abord un calcul.'); return; }
-
-  const desig = document.getElementById('add-desig').value || 'Pièce sans désignation';
-  const ral   = document.getElementById('add-ral').value;
-  const qte   = parseInt(document.getElementById('add-qte').value) || 1;
-  const mat   = matiereActive.charAt(0).toUpperCase() + matiereActive.slice(1);
-
-  const lignes = JSON.parse(localStorage.getItem('plialu-devis') || '[]');
-  lignes.push({
-    id:          Date.now(),
-    designation: desig,
-    matiere:     mat,
-    ral,
-    ep:          epaisseurActive,
-    dvp:         Math.round(dernierResultat.dvp),
-    lg:          Math.round(dernierResultat.lg),
-    qte,
-    puHT:        parseFloat(dernierResultat.pvHT.toFixed(2))
-  });
-  localStorage.setItem('plialu-devis', JSON.stringify(lignes));
-
-  const msg = document.getElementById('msg-ok');
-  msg.style.display = 'block';
-  setTimeout(() => msg.style.display = 'none', 3000);
-}
-</script>
-</body>
-</html>
+  // Pré-remplir devis
+  const mat = MATIERES[matiereActive].label;
+  const ral = document.getElementById('ral-calc').value;
+  const cat = CATEGORIES[categorieActive]?.label || '';
+  document.getElementById('add-desig').value = `${cat} ${mat} ${epaisseurActive}${ral?' - '+
