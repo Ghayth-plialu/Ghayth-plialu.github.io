@@ -296,7 +296,7 @@ input::placeholder{color:#b0bec5}
   <div class="msg-ok" id="msg-ok">✅ Ligne ajoutée au devis avec succès !</div>
 </div>
 
-</div><!-- end page -->
+</div>
 
 <script>
 // ============================================================
@@ -402,7 +402,7 @@ function calculer(){
   const surface = (dvp / 1000) * (lg / 1000);
   const poids   = surface * (epMm / 1000) * densite * 1000;
   const matBrut = poids * prixMat;
-  const matChute= matBrut / coefChute;
+  const matChute = matBrut / coefChute;
 
   // MO
   const tempsTotalSec = (nbCis * tCis) + (nbPli * tPli) + (nbPoinc * tPoinc);
@@ -412,10 +412,10 @@ function calculer(){
   const stTotal = (stLaquage > 0 ? surface * stLaquage : 0) + stSoudure + stTransp;
 
   // Prix revient & PV
-  const prHT   = matChute + moEuros + stTotal;
-  const pvCalc = prHT / (coefPort * coefMarge);
-  const pvMini = (matChute + stTotal) * 2.0;
-  const pvFinal= Math.max(pvCalc, pvMini);
+  const prHT    = matChute + moEuros + stTotal;
+  const pvCalc  = prHT / (coefPort * coefMarge);
+  const pvMini  = (matChute + stTotal) * 2.0;
+  const pvFinal = Math.max(pvCalc, pvMini);
 
   // Indicateurs
   const prixM2     = surface > 0 ? pvFinal / surface : 0;
@@ -427,16 +427,18 @@ function calculer(){
   // Temps
   const tMin = Math.floor(tempsTotalSec / 60);
   const tSec = tempsTotalSec % 60;
-  document.getElementById('r-temps').value = tempsTotalSec < 60 ? tempsTotalSec+'s' : tMin+'min '+tSec+'s';
+  document.getElementById('r-temps').value = tempsTotalSec < 60
+    ? tempsTotalSec + 's'
+    : tMin + 'min ' + tSec + 's';
 
   // Résultats
-  document.getElementById('r-mat').textContent      = matChute.toFixed(2)+' €';
-  document.getElementById('r-mo').textContent       = moEuros.toFixed(2)+' €';
-  document.getElementById('r-st').textContent       = stTotal.toFixed(2)+' €';
-  document.getElementById('r-pr').textContent       = prHT.toFixed(2)+' €';
-  document.getElementById('r-pv').textContent       = pvFinal.toFixed(2)+' €';
-  document.getElementById('r-m2').textContent       = prixM2.toFixed(2)+' €/m²';
-  document.getElementById('r-mgb').textContent      = (mgb*100).toFixed(1)+' %';
+  document.getElementById('r-mat').textContent      = matChute.toFixed(2) + ' €';
+  document.getElementById('r-mo').textContent       = moEuros.toFixed(2)  + ' €';
+  document.getElementById('r-st').textContent       = stTotal.toFixed(2)  + ' €';
+  document.getElementById('r-pr').textContent       = prHT.toFixed(2)     + ' €';
+  document.getElementById('r-pv').textContent       = pvFinal.toFixed(2)  + ' €';
+  document.getElementById('r-m2').textContent       = prixM2.toFixed(2)   + ' €/m²';
+  document.getElementById('r-mgb').textContent      = (mgb * 100).toFixed(1) + ' %';
   document.getElementById('r-coef-mat').textContent = coefSurMat.toFixed(3);
 
   // Badge marge
@@ -449,10 +451,45 @@ function calculer(){
   } else {
     badge.style.cssText = 'display:block;border-radius:8px;padding:10px 16px;text-align:center;font-weight:700;font-size:13px;margin-top:8px;background:#fee2e2;color:#991b1b';
   }
-  badge.textContent = `Marge brute : ${(mgb*100).toFixed(1)}% — Delta mat : ${delta.toFixed(2)} €`;
+  badge.textContent = 'Marge brute : ' + (mgb*100).toFixed(1) + '% — Delta mat : ' + delta.toFixed(2) + ' €';
 
   // Pré-remplir devis
   const mat = MATIERES[matiereActive].label;
   const ral = document.getElementById('ral-calc').value;
-  const cat = CATEGORIES[categorieActive]?.label || '';
-  document.getElementById('add-desig').value = `${cat} ${mat} ${epaisseurActive}${ral?' - '+
+  const cat = CATEGORIES[categorieActive].label;
+  document.getElementById('add-desig').value = cat + ' ' + mat + ' ' + epaisseurActive + (ral ? ' - ' + ral : '') + ' - L' + (lg/1000).toFixed(2) + 'm';
+  document.getElementById('add-ral').value   = ral;
+  document.getElementById('add-qte').value   = 1;
+}
+
+// ============================================================
+// AJOUTER AU DEVIS
+// ============================================================
+function ajouterAuDevis(){
+  if(!dernierResultat){ alert('Lancez d\'abord un calcul.'); return; }
+
+  const desig = document.getElementById('add-desig').value || 'Pièce sans désignation';
+  const ral   = document.getElementById('add-ral').value;
+  const qte   = parseInt(document.getElementById('add-qte').value) || 1;
+
+  const lignes = JSON.parse(localStorage.getItem('plialu-devis') || '[]');
+  lignes.push({
+    id:          Date.now(),
+    designation: desig,
+    matiere:     MATIERES[matiereActive].label,
+    ral,
+    ep:          epaisseurActive,
+    dvp:         Math.round(dernierResultat.dvp),
+    lg:          Math.round(dernierResultat.lg),
+    qte,
+    puHT:        parseFloat(dernierResultat.pvHT.toFixed(2))
+  });
+  localStorage.setItem('plialu-devis', JSON.stringify(lignes));
+
+  const msg = document.getElementById('msg-ok');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3000);
+}
+</script>
+</body>
+</html>
