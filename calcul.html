@@ -122,70 +122,22 @@ input::placeholder{color:#b0bec5}
     <button class="cat-btn" onclick="setCategorie('rails',this)">Rails</button>
     <button class="cat-btn" onclick="setCategorie('autres',this)">Autres</button>
   </div>
-  <div class="sous-type-lbl">Sous-type</div>
-  <div id="sous-btns"><span class="sous-type-empty">Aucun sous-type</span></div>
-  <div id="acc-prix-wrap" style="display:none; margin-top:10px;">
-    <label>Prix unitaire (€)</label>
-    <input type="number" id="acc-prix" step="0.01" style="width:100px;">
-  </div>
 </div>
 
 <script>
 const CATEGORIES = {
-  bavette:    { label:'Bavette',    souTypes:[] },
-  couvertine: { label:'Couvertine', souTypes:[] },
-  accessoire: { label:'Accessoire', souTypes:[
-    { label:'Eclisse',  prix: 2.5  },
-    { label:'Relevé',   prix: 1.5  },
-    { label:'Cornière', prix: null },
-    { label:'Bouchons', prix: 4.0  },
-    { label:'Pattes',   prix: 2.5  },
-    { label:'Angle',    prix: 23.0 }
-  ]},
-  rails:  { label:'Rails',  souTypes:[] },
-  autres: { label:'Autres', souTypes:[] }
+  bavette:    { label:'Bavette'    },
+  couvertine: { label:'Couvertine' },
+  accessoire: { label:'Accessoire' },
+  rails:      { label:'Rails'      },
+  autres:     { label:'Autres'     }
 };
 
 function setCategorie(key, btn) {
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-
-  const souTypesDiv = document.getElementById('sous-btns');
-  const prixWrap    = document.getElementById('acc-prix-wrap');
-  const souTypes    = CATEGORIES[key].souTypes;
-
-  prixWrap.style.display = 'none';
-  document.getElementById('acc-prix').value = '';
-
-  if (souTypes.length === 0) {
-    souTypesDiv.innerHTML = '<span class="sous-type-empty">Aucun sous-type</span>';
-  } else {
-    souTypesDiv.innerHTML = souTypes.map((s, i) =>
-      `<button class="cat-btn${i === 0 ? ' active' : ''}" 
-        onclick="setSousType(this, ${s.prix !== null ? s.prix : 'null'})">${s.label}</button>`
-    ).join('');
-
-    // Déclenche automatiquement le premier
-    const premier = CATEGORIES[key].souTypes[0];
-    afficherPrix(premier.prix);
-  }
-}
-
-function setSousType(btn, prix) {
-  document.querySelectorAll('#sous-btns .cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  afficherPrix(prix);
-}
-
-function afficherPrix(prix) {
-  const prixWrap = document.getElementById('acc-prix-wrap');
-  const prixInput = document.getElementById('acc-prix');
-  prixWrap.style.display = 'block';
-  prixInput.value = prix !== null ? prix : '';
-  prixInput.placeholder = prix !== null ? '' : 'Saisir un prix';
 }
 </script>
-
 
   <!-- 2 — MATIÈRE & ÉPAISSEUR -->
   <div class="card">
