@@ -125,7 +125,38 @@ input::placeholder{color:#b0bec5}
   <div class="sous-type-lbl">Sous-type</div>
   <div id="sous-btns"><span class="sous-type-empty">Aucun sous-type</span></div>
 </div>
-  
+
+<script>
+const CATEGORIES = {
+  bavette:    { label:'Bavette',    souTypes:[] },
+  couvertine: { label:'Couvertine', souTypes:[] },
+  accessoire: { label:'Accessoire', souTypes:['Eclisse','Relevé','Cornière','Bouchons','Pattes','Gousset','Angle'] },
+  rails:      { label:'Rails',      souTypes:[] },
+  autres:     { label:'Autres',     souTypes:[] }
+};
+
+function setCategorie(key, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const souTypesDiv = document.getElementById('sous-btns');
+  const souTypes = CATEGORIES[key].souTypes;
+
+  if (souTypes.length === 0) {
+    souTypesDiv.innerHTML = '<span class="sous-type-empty">Aucun sous-type</span>';
+  } else {
+    souTypesDiv.innerHTML = souTypes.map((s, i) =>
+      `<button class="cat-btn${i === 0 ? ' active' : ''}" onclick="setSousType(this)">${s}</button>`
+    ).join('');
+  }
+}
+
+function setSousType(btn) {
+  document.querySelectorAll('#sous-btns .cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+
 
   <!-- 2 — MATIÈRE & ÉPAISSEUR -->
   <div class="card">
