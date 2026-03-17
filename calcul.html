@@ -1,136 +1,534 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PLIALU — Calculette</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #222; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLIALU — Calculette</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1a2e38;min-height:100vh}
 
-    /* NAVBAR */
-    .nav { background: #0d2933; padding: 0 20px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
-    .nav-logo { margin-right: 30px; padding: 10px 0; display: flex; align-items: center; }
-    .nav-logo img { height: 42px; object-fit: contain; }
-    .nav-btn { background: none; border: none; color: #aaa; padding: 18px 20px; cursor: pointer; font-size: 14px; font-weight: 500; border-bottom: 3px solid transparent; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; }
-    .nav-btn:hover { color: #fff; }
-    .nav-btn.active { color: #fff; border-bottom-color: #e8fc69; }
+/* NAV */
+.nav{background:#0d2933;padding:0 24px;display:flex;align-items:center;gap:8px;height:52px;position:sticky;top:0;z-index:100}
+.nav-logo{color:#e8fc69;font-weight:800;font-size:17px;margin-right:16px;letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.nav-logo span{background:#e8fc69;color:#0d2933;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
+.nav-btn{background:transparent;border:none;color:#a0bcc4;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover{color:#fff}
+.nav-btn.active{background:#e8fc69;color:#0d2933}
 
-    /* LAYOUT */
-    .page { padding: 24px; max-width: 1100px; margin: 0 auto; }
+/* PAGE */
+.page{max-width:900px;margin:28px auto;padding:0 16px}
 
-    /* CARD */
-    .card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-    .card-title { font-size: 15px; font-weight: 700; color: #0d2933; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-    .card-title::before { content: ''; display: block; width: 4px; height: 18px; background: #e8fc69; border-radius: 2px; }
+/* CARD */
+.card{background:#fff;border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card-title{font-size:13px;font-weight:800;color:#1a2e38;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e8fc69}
 
-    /* GRIDS */
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-    .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
-    /* FORM */
-    label { display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .5px; }
-    input, select, textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; transition: border .2s; background: #fafafa; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #0d2933; background: #fff; }
+/* FORM */
+label{display:block;font-size:10px;font-weight:700;color:#6b7a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+input,select{width:100%;padding:10px 12px;border:1.5px solid #dde3e8;border-radius:8px;font-size:14px;background:#fff;color:#1a2e38;transition:border .2s}
+input:focus,select:focus{outline:none;border-color:#0d2933}
+input::placeholder{color:#b0bec5}
 
-    /* BUTTONS */
-    .btn { padding: 11px 22px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
-    .btn-primary { background: #0d2933; color: #fff; }
-    .btn-primary:hover { background: #1a4a5c; }
-    .btn-accent { background: #e8fc69; color: #0d2933; }
-    .btn-accent:hover { background: #d4e85a; }
-    .btn-outline { background: transparent; border: 2px solid #0d2933; color: #0d2933; }
-    .btn-outline:hover { background: #0d2933; color: #fff; }
-    .btn-danger { background: #dc2626; color: #fff; }
-    .btn-danger:hover { background: #b91c1c; }
-    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+/* BUTTONS GROUPE */
+.btn-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.cat-btn{padding:8px 16px;border:2px solid #dde3e8;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;background:#f8fafc;color:#1a2e38;transition:.2s}
+.cat-btn:hover{border-color:#0d2933}
+.cat-btn.active{background:#0d2933;color:#e8fc69;border-color:#0d2933}
 
-    /* MATIERE SELECTOR */
-    .mat-selector { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-    .mat-btn { padding: 10px 20px; border: 2px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; color: #555; }
-    .mat-btn:hover { border-color: #0d2933; color: #0d2933; }
-    .mat-btn.active { background: #0d2933; color: #e8fc69; border-color: #0d2933; }
+.mat-btn{padding:8px 16px;border:2px solid #dde3e8;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;background:#f8fafc;color:#1a2e38;transition:.2s}
+.mat-btn:hover{border-color:#1e40af}
+.mat-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
 
-    /* RESULTS */
-    .result-box { background: #f8fafc; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 16px; text-align: center; }
-    .result-box .lbl { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
-    .result-box .val { font-size: 22px; font-weight: 800; color: #0d2933; }
-    .result-box.highlight { background: #0d2933; border-color: #0d2933; }
-    .result-box.highlight .lbl { color: #aaa; }
-    .result-box.highlight .val { color: #e8fc69; }
-    .result-box.green { background: #ecfdf5; border-color: #059669; }
-    .result-box.green .val { color: #059669; }
+.ep-btn{padding:8px 14px;border:2px solid #dde3e8;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;background:#f8fafc;color:#1a2e38;transition:.2s}
+.ep-btn:hover{border-color:#0d2933}
+.ep-btn.active{background:#e8fc69;color:#0d2933;border-color:#0d2933}
 
-    /* BADGE */
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .badge-ok { background: #dcfce7; color: #166534; }
-    .badge-warn { background: #fef9c3; color: #854d0e; }
-    .badge-bad { background: #fee2e2; color: #991b1b; }
+/* SOUS-TYPE */
+.sous-type-lbl{font-size:10px;font-weight:700;color:#6b7a80;text-transform:uppercase;letter-spacing:.5px;margin-top:12px;margin-bottom:4px}
+.sous-type-empty{font-size:12px;color:#b0bec5;font-style:italic}
 
-    /* SEPARATOR */
-    .sep { border: none; border-top: 1px solid #f0f0f0; margin: 20px 0; }
+/* MO BLOCS */
+.mo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.mo-bloc{background:#f8fafc;border-radius:10px;padding:14px;border:1.5px solid #e2e8f0}
+.mo-title{font-size:11px;font-weight:700;color:#4a6572;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.mo-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mo-row label{font-size:10px}
+.mo-row input{font-size:12px;padding:7px 9px}
 
-    /* TOOLTIP INFO */
-    .field-info { font-size: 11px; color: #9ca3af; margin-top: 3px; }
+/* COEF */
+.coef-section{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:4px}
+.coef-bloc{border-radius:10px;padding:16px;text-align:center}
+.coef-bloc label{font-size:11px;font-weight:800;margin-bottom:8px;display:block;text-transform:uppercase;letter-spacing:.5px}
+.coef-bloc input{text-align:center;font-size:22px;font-weight:800;border:none;background:transparent;width:100%;padding:4px 0}
+.coef-bloc .coef-desc{font-size:11px;margin-top:6px;opacity:.75}
+.coef-mat{background:#dbeafe;border:2px solid #93c5fd}
+.coef-mat label,.coef-mat input,.coef-mat .coef-desc{color:#1e3a8a}
+.coef-transport{background:#fef3c7;border:2px solid #fcd34d}
+.coef-transport label,.coef-transport input,.coef-transport .coef-desc{color:#92400e}
+.coef-marge{background:#dcfce7;border:2px solid #86efac}
+.coef-marge label,.coef-marge input,.coef-marge .coef-desc{color:#14532d}
 
-    /* SECTION HEADER */
-    .section-sub { font-size: 11px; font-weight: 700; color: #0d2933; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e8fc69; display: inline-block; }
+/* RÉSULTATS */
+.result-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.result-box{background:#f8fafc;border-radius:8px;padding:14px;text-align:center;border:1.5px solid #e2e8f0}
+.result-box .lbl{font-size:10px;font-weight:700;color:#6b7a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.result-box .val{font-size:15px;font-weight:800;color:#0d2933}
+.result-box.highlight{background:#0d2933;border-color:#0d2933}
+.result-box.highlight .lbl{color:#a0bcc4}
+.result-box.highlight .val{color:#e8fc69;font-size:20px}
+.result-box.green{background:#dcfce7;border-color:#86efac}
+.result-box.green .val{color:#166534}
 
-    @media (max-width: 600px) {
-      .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
-    }
-  </style>
+/* BADGE DELTA */
+#r-delta-badge{border-radius:8px;padding:10px 16px;text-align:center;font-weight:700;font-size:13px;margin-top:4px;display:none}
+
+/* BTN CALCULER */
+.btn-calc{background:#e8fc69;color:#0d2933;border:none;border-radius:8px;padding:12px 28px;font-size:15px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px;margin-top:16px}
+.btn-calc:hover{background:#d4f040;transform:translateY(-1px)}
+
+/* AJOUTER AU DEVIS */
+.add-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.btn-add{background:#e8fc69;color:#0d2933;border:none;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-add:hover{background:#d4f040}
+.msg-ok{background:#dcfce7;color:#166534;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;display:none;margin-top:10px}
+
+@media(max-width:650px){
+  .grid2,.grid3,.mo-grid,.coef-section,.result-grid,.add-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">
-    <img src="https://media.licdn.com/dms/image/v2/D4E0BAQEVHChGDClWSw/company-logo_200_200/company-logo_200_200/0/1711383705214/plialu_logo?e=2147483647&v=beta&t=Yynd6OIt06-9izNKmvnm66nc15JvNhJKp5H75QXgh50" alt="PLIALU">
-  </div>
-  <a href="index.html" class="nav-btn">🏠 Accueil</a>
-  <a href="calcul.html" class="nav-btn active">🧮 Calculette</a>
-  <a href="devis.html" class="nav-btn">📄 Devis</a>
+  <div class="nav-logo"><span>○</span> PLIALU</div>
+  <a class="nav-btn active" href="calcul.html">Calculette</a>
+  <a class="nav-btn" href="devis.html">Devis</a>
 </nav>
 
-<!-- PAGE -->
 <div class="page">
 
-  <!-- ══ MATIÈRE & CARACTÉRISTIQUES ══ -->
+  <!-- 1 — CATÉGORIE -->
   <div class="card">
-    <div class="card-title">Matière & Caractéristiques</div>
+    <div class="card-title">1 — Catégorie de pièce</div>
+    <div class="btn-group" id="cat-btns">
+      <button class="cat-btn active" onclick="setCategorie('bavette',this)">Bavette</button>
+      <button class="cat-btn" onclick="setCategorie('acc_bavette',this)">Accessoire Bavette</button>
+      <button class="cat-btn" onclick="setCategorie('couvertine',this)">Couvertine</button>
+      <button class="cat-btn" onclick="setCategorie('acc_couv',this)">Couvertine Accessoire</button>
+      <button class="cat-btn" onclick="setCategorie('depart',this)">Départ</button>
+      <button class="cat-btn" onclick="setCategorie('autres',this)">Autres</button>
+    </div>
+    <div class="sous-type-lbl">Sous-type</div>
+    <div id="sous-btns"><span class="sous-type-empty">Aucun sous-type</span></div>
+  </div>
+
+  <!-- 2 — MATIÈRE & ÉPAISSEUR -->
+  <div class="card">
+    <div class="card-title">2 — Matière & Épaisseur</div>
 
     <label>Matière</label>
-    <div class="mat-selector">
-      <button class="mat-btn active" onclick="setMatiere('alu',this)">🔘 Aluminium</button>
-      <button class="mat-btn" onclick="setMatiere('acier',this)">⚙️ Acier</button>
-      <button class="mat-btn" onclick="setMatiere('inox',this)">✨ Inox</button>
-      <button class="mat-btn" onclick="setMatiere('galva',this)">🛡 Galvanisé</button>
-      <button class="mat-btn" onclick="setMatiere('zinc',this)">🔩 Zinc</button>
+    <div class="btn-group" id="mat-btns" style="margin-bottom:16px">
+      <button class="mat-btn active" onclick="setMatiere('aluminium',this)">Aluminium</button>
+      <button class="mat-btn" onclick="setMatiere('acier',this)">Acier</button>
+      <button class="mat-btn" onclick="setMatiere('inox',this)">Inox</button>
     </div>
 
+    <label>Épaisseur</label>
+    <div class="btn-group" id="ep-btns" style="margin-bottom:16px"></div>
+
+    <div class="grid2">
+      <div>
+        <label>RAL / Finition</label>
+        <input type="text" id="ral-calc" placeholder="ex: 9006, Brut, Anodisé...">
+      </div>
+      <div>
+        <label>Prix matière (€/kg)</label>
+        <input type="number" id="prix-mat" value="4.50" step="0.01">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 — DIMENSIONS & MO -->
+  <div class="card">
+    <div class="card-title">3 — Dimensions & Main d'œuvre</div>
+
+    <div class="grid2" style="margin-bottom:16px">
+      <div>
+        <label>DVP — Développé (mm)</label>
+        <input type="number" id="dvp" placeholder="ex: 300">
+      </div>
+      <div>
+        <label>Longueur (mm)</label>
+        <input type="number" id="longueur" value="3000">
+      </div>
+    </div>
+
+    <div class="mo-grid">
+      <div class="mo-bloc">
+        <div class="mo-title">⏱ Cisaillage</div>
+        <div class="mo-row">
+          <div><label>NB Passes</label><input type="number" id="nb-cis" value="1" min="0"></div>
+          <div><label>Tps/Passe (s)</label><input type="number" id="t-cis" value="45" min="0"></div>
+        </div>
+      </div>
+      <div class="mo-bloc">
+        <div class="mo-title">⏱ Pliage</div>
+        <div class="mo-row">
+          <div><label>NB Passes</label><input type="number" id="nb-pli" value="2" min="0"></div>
+          <div><label>Tps/Passe (s)</label><input type="number" id="t-pli" value="30" min="0"></div>
+        </div>
+      </div>
+      <div class="mo-bloc">
+        <div class="mo-title">⏱ Poinçonnage</div>
+        <div class="mo-row">
+          <div><label>NB Passes</label><input type="number" id="nb-poinc" value="0" min="0"></div>
+          <div><label>Tps/Passe (s)</label><input type="number" id="t-poinc" value="25" min="0"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <label>Taux horaire MO (€/h)</label>
+        <input type="number" id="taux-mo" value="60" step="0.5">
+      </div>
+      <div>
+        <label>Temps total calculé</label>
+        <input type="text" id="r-temps" readonly placeholder="—" style="background:#f8fafc;color:#0d2933;font-weight:700">
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 — SOUS-TRAITANCE -->
+  <div class="card" style="border:2px solid #e8fc69">
+    <div class="card-title">4 — Sous-traitance</div>
     <div class="grid3">
       <div>
-        <label>Catégorie de pièce</label>
-        <select id="type-piece">
-          <option value="couvertine">Couvertine</option>
-          <option value="bavette">Bavette / Larmier</option>
-          <option value="appui">Appui de fenêtre</option>
-          <option value="habillage">Habillage de façade</option>
-          <option value="profil">Profil de finition</option>
-          <option value="autre">Autre / Sur mesure</option>
-        </select>
+        <label>Laquage (€/m²)</label>
+        <input type="number" id="st-laquage" value="0" step="0.01">
       </div>
       <div>
-        <label>Épaisseur</label>
-        <select id="epaisseur">
-          <option value="10/10">10/10 (1.0 mm)</option>
-          <option value="15/10" selected>15/10 (1.5 mm)</option>
-          <option value="20/10">20/10 (2.0 mm)</option>
-          <option value="25/10">25/10 (2.5 mm)</option>
-          <option value="30/10">30/10 (3.0 mm)</option>
-        </select>
+        <label>Soudure (€ fixe)</label>
+        <input type="number" id="st-soudure" value="0" step="0.01">
       </div>
       <div>
-        <label>RA
+        <label>Transport (€ fixe)</label>
+        <input type="number" id="st-transp" value="0" step="0.01">
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 — COEFFICIENTS -->
+  <div class="card">
+    <div class="card-title">5 — Coefficients</div>
+    <div class="coef-section">
+      <div class="coef-bloc coef-mat">
+        <label>Coeff Mat</label>
+        <input type="number" id="coef-chute" value="0.9" step="0.01">
+        <div class="coef-desc">Coefficient de chute matière</div>
+      </div>
+      <div class="coef-bloc coef-transport">
+        <label>Coeff Transport</label>
+        <input type="number" id="coef-port" value="0.9" step="0.01">
+        <div class="coef-desc">Port de frais & frais fixes</div>
+      </div>
+      <div class="coef-bloc coef-marge">
+        <label>Coeff Marge</label>
+        <input type="number" id="coef-marge" value="0.65" step="0.01">
+        <div class="coef-desc">Objectif de marge brute</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 — RÉSULTATS -->
+  <div class="card">
+    <div class="card-title">6 — Résultats</div>
+
+    <div class="result-grid">
+      <div class="result-box">
+        <div class="lbl">Matière + Chute</div>
+        <div class="val" id="r-mat">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Main d'œuvre</div>
+        <div class="val" id="r-mo">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Sous-traitance</div>
+        <div class="val" id="r-st">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Prix de revient</div>
+        <div class="val" id="r-pr">—</div>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-box highlight">
+        <div class="lbl">PV HT</div>
+        <div class="val" id="r-pv">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Prix / m²</div>
+        <div class="val" id="r-m2">—</div>
+      </div>
+      <div class="result-box green">
+        <div class="lbl">Marge brute</div>
+        <div class="val" id="r-mgb">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Coeff / Mat</div>
+        <div class="val" id="r-coef-mat">—</div>
+      </div>
+    </div>
+
+    <div id="r-delta-badge"></div>
+
+    <button class="btn-calc" onclick="calculer()">⚡ Calculer</button>
+  </div>
+
+  <!-- 7 — AJOUTER AU DEVIS -->
+  <div class="card">
+    <div class="card-title">7 — Ajouter au devis</div>
+    <div class="add-grid">
+      <div>
+        <label>Désignation</label>
+        <input type="text" id="add-desig" placeholder="Description de la pièce">
+      </div>
+      <div>
+        <label>RAL affiché sur devis</label>
+        <input type="text" id="add-ral" placeholder="ex: RAL 9006">
+      </div>
+      <div>
+        <label>Quantité</label>
+        <input type="number" id="add-qte" value="1" min="1">
+      </div>
+    </div>
+    <button class="btn-add" onclick="ajouterAuDevis()">+ Ajouter au devis</button>
+    <div class="msg-ok" id="msg-ok">✅ Ligne ajoutée au devis avec succès !</div>
+  </div>
+
+</div><!-- end page -->
+
+<script>
+// ============================================================
+// DONNÉES
+// ============================================================
+const CATEGORIES = {
+  bavette:     { label:'Bavette',               souTypes:[] },
+  acc_bavette: { label:'Accessoire Bavette',    souTypes:[] },
+  couvertine:  { label:'Couvertine',            souTypes:[] },
+  acc_couv:    { label:'Couvertine Accessoire', souTypes:[] },
+  depart:      { label:'Départ',                souTypes:[] },
+  autres:      { label:'Autres',                souTypes:[] }
+};
+
+const MATIERES = {
+  aluminium:{ label:'Aluminium', epaisseurs:['10/10','15/10','20/10','25/10','30/10'] },
+  acier:    { label:'Acier',     epaisseurs:['10/10','15/10','20/10','25/10','30/10'] },
+  inox:     { label:'Inox',      epaisseurs:['10/10','15/10','20/10','25/10','30/10'] }
+};
+
+const DENSITE   = { aluminium:2.7, acier:7.85, inox:8.0 };
+const PRIX_BASE = { aluminium:4.50, acier:1.20, inox:6.00 };
+
+// ============================================================
+// ÉTAT
+// ============================================================
+let categorieActive = 'bavette';
+let sousTypeActif   = '';
+let matiereActive   = 'aluminium';
+let epaisseurActive = '15/10';
+let dernierResultat = null;
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  buildEpBtns();
+  buildSousBtns();
+});
+
+// ============================================================
+// BUILDERS
+// ============================================================
+function buildSousBtns(){
+  const container = document.getElementById('sous-btns');
+  const st = CATEGORIES[categorieActive]?.souTypes || [];
+  if(!st.length){
+    container.innerHTML = '<span class="sous-type-empty">Aucun sous-type</span>';
+    return;
+  }
+  container.innerHTML = st.map(s =>
+    `<button class="cat-btn" onclick="setSousType('${s}',this)">${s}</button>`
+  ).join('');
+}
+
+function buildEpBtns(){
+  document.getElementById('ep-btns').innerHTML =
+    MATIERES[matiereActive].epaisseurs.map(ep =>
+      `<button class="ep-btn${ep===epaisseurActive?' active':''}"
+        onclick="setEpaisseur('${ep}',this)">${ep}</button>`
+    ).join('');
+}
+
+// ============================================================
+// SETTERS
+// ============================================================
+function setCategorie(key, btn){
+  categorieActive = key;
+  sousTypeActif   = '';
+  document.querySelectorAll('#cat-btns .cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildSousBtns();
+}
+
+function setSousType(st, btn){
+  sousTypeActif = st;
+  document.querySelectorAll('#sous-btns .cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setMatiere(key, btn){
+  matiereActive   = key;
+  epaisseurActive = MATIERES[key].epaisseurs[1] || MATIERES[key].epaisseurs[0];
+  document.querySelectorAll('#mat-btns .mat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildEpBtns();
+  document.getElementById('prix-mat').value = PRIX_BASE[key] ?? 4.50;
+}
+
+function setEpaisseur(ep, btn){
+  epaisseurActive = ep;
+  document.querySelectorAll('#ep-btns .ep-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ============================================================
+// CALCUL
+// ============================================================
+function calculer(){
+  const prixMat  = parseFloat(document.getElementById('prix-mat').value)  || 4.50;
+  const dvp      = parseFloat(document.getElementById('dvp').value)       || 0;
+  const lg       = parseFloat(document.getElementById('longueur').value)  || 0;
+
+  if(!dvp || !lg){ alert('Renseignez le DVP et la longueur.'); return; }
+
+  const nbCis    = parseFloat(document.getElementById('nb-cis').value)    || 0;
+  const tCis     = parseFloat(document.getElementById('t-cis').value)     || 45;
+  const nbPli    = parseFloat(document.getElementById('nb-pli').value)    || 0;
+  const tPli     = parseFloat(document.getElementById('t-pli').value)     || 30;
+  const nbPoinc  = parseFloat(document.getElementById('nb-poinc').value)  || 0;
+  const tPoinc   = parseFloat(document.getElementById('t-poinc').value)   || 25;
+  const tauxMO   = parseFloat(document.getElementById('taux-mo').value)   || 60;
+
+  const stLaquage = parseFloat(document.getElementById('st-laquage').value) || 0;
+  const stSoudure = parseFloat(document.getElementById('st-soudure').value) || 0;
+  const stTransp  = parseFloat(document.getElementById('st-transp').value)  || 0;
+
+  const coefChute = parseFloat(document.getElementById('coef-chute').value) || 0.9;
+  const coefPort  = parseFloat(document.getElementById('coef-port').value)  || 0.9;
+  const coefMarge = parseFloat(document.getElementById('coef-marge').value) || 0.65;
+
+  // Calcul matière
+  const epMm    = parseFloat(epaisseurActive) / 10;
+  const densite = DENSITE[matiereActive] || 2.7;
+  const surface = (dvp / 1000) * (lg / 1000);
+  const poids   = surface * (epMm / 1000) * densite * 1000;
+  const matBrut = poids * prixMat;
+  const matChute= matBrut / coefChute;
+
+  // MO
+  const tempsTotalSec = (nbCis * tCis) + (nbPli * tPli) + (nbPoinc * tPoinc);
+  const moEuros       = (tempsTotalSec / 3600) * tauxMO;
+
+  // ST
+  const stTotal = (stLaquage > 0 ? surface * stLaquage : 0) + stSoudure + stTransp;
+
+  // Prix revient & PV
+  const prHT    = matChute + moEuros + stTotal;
+  const pvCalc  = prHT / (coefPort * coefMarge);
+  const pvMini  = (matChute + stTotal) * 2.0;
+  const pvFinal = Math.max(pvCalc, pvMini);
+
+  // Indicateurs
+  const prixM2     = surface > 0 ? pvFinal / surface : 0;
+  const coefSurMat = matChute > 0 ? pvFinal / matChute : 0;
+  const mgb        = pvFinal > 0 ? (pvFinal - matChute) / pvFinal : 0;
+
+  dernierResultat = { matChute, moEuros, stTotal, prHT, pvHT:pvFinal, prixM2, coefSurMat, mgb, dvp, lg, surface };
+
+  // Affichage temps
+  const tMin = Math.floor(tempsTotalSec / 60);
+  const tSec = tempsTotalSec % 60;
+  document.getElementById('r-temps').value = tempsTotalSec < 60 ? tempsTotalSec+'s' : tMin+'min '+tSec+'s';
+
+  // Résultats
+  document.getElementById('r-mat').textContent     = matChute.toFixed(2)+' €';
+  document.getElementById('r-mo').textContent      = moEuros.toFixed(2)+' €';
+  document.getElementById('r-st').textContent      = stTotal.toFixed(2)+' €';
+  document.getElementById('r-pr').textContent      = prHT.toFixed(2)+' €';
+  document.getElementById('r-pv').textContent      = pvFinal.toFixed(2)+' €';
+  document.getElementById('r-m2').textContent      = prixM2.toFixed(2)+' €/m²';
+  document.getElementById('r-mgb').textContent     = (mgb*100).toFixed(1)+' %';
+  document.getElementById('r-coef-mat').textContent= coefSurMat.toFixed(3);
+
+  // Badge delta marge
+  const badge = document.getElementById('r-delta-badge');
+  const delta = pvFinal - matChute;
+  badge.style.display = 'block';
+  if(mgb >= 0.45){
+    badge.style.cssText = 'display:block;border-radius:8px;padding:10px 16px;text-align:center;font-weight:700;font-size:13px;margin-top:8px;background:#dcfce7;color:#166534';
+  } else if(mgb >= 0.35){
+    badge.style.cssText = 'display:block;border-radius:8px;padding:10px 16px;text-align:center;font-weight:700;font-size:13px;margin-top:8px;background:#fef9c3;color:#854d0e';
+  } else {
+    badge.style.cssText = 'display:block;border-radius:8px;padding:10px 16px;text-align:center;font-weight:700;font-size:13px;margin-top:8px;background:#fee2e2;color:#991b1b';
+  }
+  badge.textContent = `Marge brute : ${(mgb*100).toFixed(1)}% — Delta mat : ${delta.toFixed(2)} €`;
+
+  // Pré-remplir ajout devis
+  const mat  = matiereActive.charAt(0).toUpperCase() + matiereActive.slice(1);
+  const ral  = document.getElementById('ral-calc').value;
+  const cat  = CATEGORIES[categorieActive]?.label || '';
+  document.getElementById('add-desig').value = `${cat} ${mat} ${epaisseurActive}${ral?' - '+ral:''} - L${(lg/1000).toFixed(2)}m`;
+  document.getElementById('add-ral').value   = ral;
+  document.getElementById('add-qte').value   = 1;
+}
+
+// ============================================================
+// AJOUTER AU DEVIS (localStorage)
+// ============================================================
+function ajouterAuDevis(){
+  if(!dernierResultat){ alert('Lancez d\'abord un calcul.'); return; }
+
+  const desig = document.getElementById('add-desig').value || 'Pièce sans désignation';
+  const ral   = document.getElementById('add-ral').value;
+  const qte   = parseInt(document.getElementById('add-qte').value) || 1;
+  const mat   = matiereActive.charAt(0).toUpperCase() + matiereActive.slice(1);
+
+  const lignes = JSON.parse(localStorage.getItem('plialu-devis') || '[]');
+  lignes.push({
+    id:          Date.now(),
+    designation: desig,
+    matiere:     mat,
+    ral,
+    ep:          epaisseurActive,
+    dvp:         Math.round(dernierResultat.dvp),
+    lg:          Math.round(dernierResultat.lg),
+    qte,
+    puHT:        parseFloat(dernierResultat.pvHT.toFixed(2))
+  });
+  localStorage.setItem('plialu-devis', JSON.stringify(lignes));
+
+  const msg = document.getElementById('msg-ok');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3000);
+}
+</script>
+</body>
+</html>
