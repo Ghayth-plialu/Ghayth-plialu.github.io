@@ -8,81 +8,186 @@
 </head>
 <body>
 
-  <!-- ════════════════════════════════
-       NAVIGATION
-  ════════════════════════════════ -->
-  <nav class="navbar">
-    <span class="nav-logo">PLIALU</span>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link active">Accueil</a>
-      <a href="calcul.html" class="nav-link">Calculatrice</a>
-      <a href="devis.html" class="nav-link">Devis</a>
-    </div>
-  </nav>
+<!-- ═══════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="navbar-brand">🔧 PLIALU</div>
+  <div class="navbar-links">
+    <a href="index.html" class="active">🏠 Accueil</a>
+    <a href="calcul.html">🧮 Calculette</a>
+    <a href="devis.html">📄 Devis</a>
+  </div>
+</nav>
 
-  <!-- ════════════════════════════════
-       HERO
-  ════════════════════════════════ -->
-  <main class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">Outil interne — 2026</div>
-      <h1 class="hero-title">Outil de chiffrage<br><span>PLIALU</span></h1>
-      <p class="hero-sub">
-        Calculez vos prix de revient, éditez vos devis et gérez vos pièces aluminium
-        en quelques clics.
+<!-- ═══════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section class="hero hero-home">
+  <div class="hero-content">
+    <div class="hero-logo">🔧</div>
+    <h1>PLIALU</h1>
+    <p class="hero-sub">Outil interne technico-commercial</p>
+    <p class="hero-desc">
+      Calculette de prix aluminium · Générateur de devis · Grille tarifaire
+    </p>
+    <div class="hero-btns">
+      <a href="calcul.html" class="btn btn-primary btn-lg">🧮 Calculette</a>
+      <a href="devis.html"  class="btn btn-secondary btn-lg">📄 Générer un devis</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CARDS FONCTIONNALITÉS
+════════════════════════════════════════ -->
+<main class="container">
+
+  <h2 class="section-title">Fonctionnalités</h2>
+
+  <div class="cards-grid">
+
+    <div class="card feature-card">
+      <div class="feature-icon">🧮</div>
+      <h3>Calculette prix</h3>
+      <p>
+        Calculez instantanément le prix au mètre linéaire d'une pièce aluminium
+        selon le type, l'épaisseur et la finition.
       </p>
-      <div class="hero-actions">
-        <a href="calcul.html" class="btn btn-primary">Ouvrir la calculatrice</a>
-        <a href="devis.html" class="btn btn-outline">Voir les devis</a>
-      </div>
+      <a href="calcul.html" class="btn btn-primary btn-sm" style="margin-top:auto;">
+        Accéder →
+      </a>
     </div>
-  </main>
 
-  <!-- ════════════════════════════════
-       CARTES FONCTIONNALITÉS
-  ════════════════════════════════ -->
-  <section class="features">
+    <div class="card feature-card">
+      <div class="feature-icon">📄</div>
+      <h3>Générateur de devis</h3>
+      <p>
+        Renseignez les informations client et chantier, composez vos lignes
+        et générez un devis PDF professionnel en un clic.
+      </p>
+      <a href="devis.html" class="btn btn-primary btn-sm" style="margin-top:auto;">
+        Accéder →
+      </a>
+    </div>
 
-    <div class="feature-card">
+    <div class="card feature-card">
       <div class="feature-icon">📐</div>
-      <h3>Calculatrice technique</h3>
+      <h3>Pièces disponibles</h3>
       <p>
-        Sélectionnez une pièce, une matière, une épaisseur.
-        Saisissez les dimensions et obtenez instantanément
-        le prix de revient et le prix de vente.
+        Couvertines, bavettes, appuis de fenêtre, larmiers, habillages, profils
+        de finition — tous les éléments d'enveloppe du bâtiment.
       </p>
-      <a href="calcul.html" class="feature-link">Ouvrir →</a>
+      <a href="calcul.html" class="btn btn-secondary btn-sm" style="margin-top:auto;">
+        Voir la grille →
+      </a>
     </div>
 
-    <div class="feature-card">
-      <div class="feature-icon">📋</div>
-      <h3>Éditeur de devis</h3>
-      <p>
-        Ajoutez vos lignes calculées, saisissez les informations
-        client et générez un devis PDF professionnel en un clic.
-      </p>
-      <a href="devis.html" class="feature-link">Ouvrir →</a>
+  </div>
+
+  <!-- ─────────────────────────────────────
+       INFOS SOCIÉTÉ
+  ───────────────────────────────────── -->
+  <h2 class="section-title" style="margin-top:48px;">À propos de PLIALU</h2>
+
+  <div class="card">
+    <div class="about-grid">
+
+      <div class="about-bloc">
+        <div class="about-icon">🏭</div>
+        <h4>Activité</h4>
+        <p id="about-activite">—</p>
+      </div>
+
+      <div class="about-bloc">
+        <div class="about-icon">📍</div>
+        <h4>Adresse</h4>
+        <p id="about-adresse">—</p>
+      </div>
+
+      <div class="about-bloc">
+        <div class="about-icon">📞</div>
+        <h4>Contact</h4>
+        <p id="about-tel">—</p>
+        <p id="about-email">—</p>
+      </div>
+
+      <div class="about-bloc">
+        <div class="about-icon">🔩</div>
+        <h4>Épaisseurs travaillées</h4>
+        <p>10/10 · 15/10 · 20/10 · 25/10 · 30/10</p>
+      </div>
+
     </div>
+  </div>
 
-    <div class="feature-card">
-      <div class="feature-icon">⚙️</div>
-      <h3>Paramètres adaptables</h3>
-      <p>
-        Taux horaire, temps opératoires, coefficients de vente —
-        tout est modifiable directement dans l'interface
-        sans toucher au code.
-      </p>
-      <a href="calcul.html" class="feature-link">Configurer →</a>
+  <!-- ─────────────────────────────────────
+       COMPTEUR DEVIS EN COURS
+  ───────────────────────────────────── -->
+  <div class="card stat-card">
+    <div class="stat-grid">
+
+      <div class="stat-bloc">
+        <div class="stat-value" id="stat-lignes">0</div>
+        <div class="stat-label">Ligne(s) en cours</div>
+      </div>
+
+      <div class="stat-bloc">
+        <div class="stat-value" id="stat-total-ht">0,00 €</div>
+        <div class="stat-label">Total HT devis en cours</div>
+      </div>
+
+      <div class="stat-bloc">
+        <div class="stat-value" id="stat-total-ttc">0,00 €</div>
+        <div class="stat-label">Total TTC devis en cours</div>
+      </div>
+
     </div>
+    <div style="text-align:center;margin-top:16px;">
+      <a href="devis.html" class="btn btn-primary btn-sm">📄 Voir le devis en cours →</a>
+    </div>
+  </div>
 
-  </section>
+</main>
 
-  <!-- ════════════════════════════════
-       FOOTER
-  ════════════════════════════════ -->
-  <footer class="footer">
-    <span>PLIALU © 2026 — Outil interne développé par Ghayth Benyoucef</span>
-  </footer>
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="footer">
+  <p>PLIALU — Outil interne technico-commercial · Ghayth Benyoucef · 2026</p>
+</footer>
 
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    // ── Infos société depuis data.js
+    const set = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    set("about-activite", SOCIETE.activite);
+    set("about-adresse",  SOCIETE.adresse);
+    set("about-tel",      SOCIETE.tel);
+    set("about-email",    SOCIETE.email);
+
+    // ── Stats devis en cours (localStorage)
+    const lignes    = JSON.parse(localStorage.getItem("plialu_lignes") || "[]");
+    const totalHT   = lignes.reduce((s, l) => s + (l.totalHT || 0), 0);
+    const totalTTC  = totalHT * 1.2;
+
+    set("stat-lignes",    lignes.length);
+    set("stat-total-ht",  arrondi(totalHT).toFixed(2).replace(".", ",") + " €");
+    set("stat-total-ttc", arrondi(totalTTC).toFixed(2).replace(".", ",") + " €");
+
+  });
+
+</script>
 </body>
 </html>
