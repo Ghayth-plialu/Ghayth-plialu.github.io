@@ -3,16 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accueil - Site Ghayth</title>
+  <title>PLIALU — Outil interne</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Bienvenue sur mon site</h1>
-  <p>Mon premier site est en ligne avec GitHub Pages.</p>
 
-  <nav>
-    <a href="index.html">Accueil</a>
-    <a href="calcul.html">Calcul</a>
-    <a href="devis.html">Devis</a>
+  <!-- ════════════════════════════════
+       NAVIGATION
+  ════════════════════════════════ -->
+  <nav class="navbar">
+    <span class="nav-logo">PLIALU</span>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Accueil</a>
+      <a href="calcul.html" class="nav-link">Calculatrice</a>
+      <a href="devis.html" class="nav-link">Devis</a>
+    </div>
   </nav>
+
+  <!-- ════════════════════════════════
+       HERO
+  ════════════════════════════════ -->
+  <main class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Outil interne — 2026</div>
+      <h1 class="hero-title">Outil de chiffrage<br><span>PLIALU</span></h1>
+      <p class="hero-sub">
+        Calculez vos prix de revient, éditez vos devis et gérez vos pièces aluminium
+        en quelques clics.
+      </p>
+      <div class="hero-actions">
+        <a href="calcul.html" class="btn btn-primary">Ouvrir la calculatrice</a>
+        <a href="devis.html" class="btn btn-outline">Voir les devis</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ════════════════════════════════
+       CARTES FONCTIONNALITÉS
+  ════════════════════════════════ -->
+  <section class="features">
+
+    <div class="feature-card">
+      <div class="feature-icon">📐</div>
+      <h3>Calculatrice technique</h3>
+      <p>
+        Sélectionnez une pièce, une matière, une épaisseur.
+        Saisissez les dimensions et obtenez instantanément
+        le prix de revient et le prix de vente.
+      </p>
+      <a href="calcul.html" class="feature-link">Ouvrir →</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>Éditeur de devis</h3>
+      <p>
+        Ajoutez vos lignes calculées, saisissez les informations
+        client et générez un devis PDF professionnel en un clic.
+      </p>
+      <a href="devis.html" class="feature-link">Ouvrir →</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <h3>Paramètres adaptables</h3>
+      <p>
+        Taux horaire, temps opératoires, coefficients de vente —
+        tout est modifiable directement dans l'interface
+        sans toucher au code.
+      </p>
+      <a href="calcul.html" class="feature-link">Configurer →</a>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       FOOTER
+  ════════════════════════════════ -->
+  <footer class="footer">
+    <span>PLIALU © 2026 — Outil interne développé par Ghayth Benyoucef</span>
+  </footer>
+
 </body>
 </html>
