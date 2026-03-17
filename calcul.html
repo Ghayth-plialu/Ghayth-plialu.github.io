@@ -1,1 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLIALU — Calculette</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="navbar-brand">🔧 PLIALU</div>
+  <div class="navbar-links">
+    <a href="index.html">🏠 Accueil</a>
+    <a href="calcul.html" class="active">🧮 Calculette</a>
+    <a href="devis.html">📄 Devis</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section class="hero">
+  <h1>🧮 Calculette pièces aluminium</h1>
+  <p>Calcul instantané du prix au mètre linéaire selon le type de pièce, l'épaisseur et la finition.</p>
+</section>
+
+<main class="container">
+
+  <!-- ─────────────────────────────────────
+       FORMULAIRE DE CALCUL
+  ───────────────────────────────────── -->
+  <div class="card">
+    <h2>📐 Paramètres de la pièce</h2>
+
+    <div class="form-grid">
+
+      <!-- Description -->
+      <div class="form-group full">
+        <label for="desc">Description de la pièce</label>
+        <input type="text" id="desc" placeholder="Ex : Couvertine acrotère R+2 bâtiment A">
+      </div>
+
+      <!-- Catégorie -->
+      <div class="form-group">
+        <label for="select-categorie">Type de pièce *</label>
+        <select id="select-categorie" onchange="onCategorieChange()">
+          <!-- rempli par script.js -->
+        </select>
+      </div>
+
+      <!-- Épaisseur -->
+      <div class="form-group">
+        <label for="select-epaisseur">Épaisseur *</label>
+        <select id="select-epaisseur" onchange="onParamChange()">
+          <!-- rempli par script.js -->
+        </select>
+      </div>
+
+      <!-- Finition -->
+      <div class="form-group">
+        <label for="select-finition">Finition *</label>
+        <select id="select-finition" onchange="onParamChange()">
+          <!-- rempli par script.js -->
+        </select>
+      </div>
+
+      <!-- Quantité -->
+      <div class="form-group">
+        <label for="quantite">Quantité (ml) *</label>
+        <input type="number" id="quantite" min="0.1" step="0.1" placeholder="Ex : 12.5" oninput="onParamChange()">
+      </div>
+
+    </div>
+
+    <!-- Résultat instantané -->
+    <div class="result-box" id="result-box" style="display:none;">
+      <div class="result-row">
+        <span>💰 Prix unitaire</span>
+        <strong id="res-prix-ml">—</strong>
+      </div>
+      <div class="result-row">
+        <span>📏 Quantité</span>
+        <strong id="res-quantite">—</strong>
+      </div>
+      <div class="result-row highlight">
+        <span>📦 Total HT</span>
+        <strong id="res-total-ht">—</strong>
+      </div>
+      <div class="result-row">
+        <span>🏦 TVA (20%)</span>
+        <strong id="res-tva">—</strong>
+      </div>
+      <div class="result-row highlight-ttc">
+        <span>✅ Total TTC</span>
+        <strong id="res-total-ttc">—</strong>
+      </div>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div class="alert alert-error" id="alert-erreur" style="display:none;">
+      ⚠️ Veuillez renseigner tous les champs obligatoires.
+    </div>
+
+    <!-- Boutons -->
+    <div class="btn-group" style="margin-top:20px;">
+      <button class="btn btn-primary" onclick="calculer()">⚡ Calculer</button>
+      <button class="btn btn-success" onclick="ajouterAuDevis()">➕ Ajouter au devis</button>
+      <button class="btn btn-secondary" onclick="resetFormulaire()">🔄 Réinitialiser</button>
+    </div>
+
+  </div>
+
+  <!-- ─────────────────────────────────────
+       TABLEAU DES LIGNES AJOUTÉES
+  ───────────────────────────────────── -->
+  <div class="card" id="section-lignes">
+    <div class="card-header">
+      <h2>📋 Lignes du devis en cours</h2>
+      <button class="btn btn-danger btn-sm" onclick="reinitialiserDevis()">🗑️ Tout vider</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Épaisseur</th>
+            <th>Finition</th>
+            <th>Qté (ml)</th>
+            <th>Prix / ml</th>
+            <th>Total HT</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tableau-lignes">
+          <!-- rempli par script.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Totaux -->
+    <div class="totaux-box">
+      <div class="totaux-row">
+        <span>Total HT</span>
+        <strong id="total-ht">0,00 € HT</strong>
+      </div>
+      <div class="totaux-row">
+        <span>TVA 20%</span>
+        <strong id="total-tva">0,00 € HT</strong>
+      </div>
+      <div class="totaux-row totaux-ttc">
+        <span>Total TTC</span>
+        <strong id="total-ttc">0,00 € TTC</strong>
+      </div>
+    </div>
+
+    <!-- Action devis -->
+    <div class="btn-group" style="margin-top:16px;">
+      <a href="devis.html" class="btn btn-primary">📄 Générer le devis →</a>
+    </div>
+
+  </div>
+
+  <!-- ─────────────────────────────────────
+       TABLEAU DE RÉFÉRENCE TARIFS
+  ───────────────────────────────────── -->
+  <div class="card">
+    <h2>📊 Grille tarifaire de référence (€ HT / ml — brut)</h2>
+    <div class="table-wrapper">
+      <table class="table" id="grille-tarifs">
+        <thead>
+          <tr>
+            <th>Type de pièce</th>
+            <th>10/10</th>
+            <th>15/10</th>
+            <th>20/10</th>
+            <th>25/10</th>
+            <th>30/10</th>
+          </tr>
+        </thead>
+        <tbody id="grille-body">
+          <!-- rempli dynamiquement -->
+        </tbody>
+      </table>
+    </div>
+    <p class="note">* Tarifs brut aluminium. Appliquer le coefficient finition pour laqué / anodisé.</p>
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="footer">
+  <p>PLIALU — Outil interne technico-commercial · Ghayth Benyoucef · 2026</p>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+
+  // ── Calcul instantané au changement de paramètre
+  function onParamChange() {
+    const cat  = document.getElementById("select-categorie").value;
+    const ep   = document.getElementById("select-epaisseur").value;
+    const fin  = document.getElementById("select-finition").value;
+    const qte  = parseFloat(document.getElementById("quantite").value);
+
+    if (cat && ep && fin && qte > 0) {
+      afficherResultat(cat, ep, fin, qte);
+    }
+  }
+
+  function onCategorieChange() {
+    onParamChange();
+  }
+
+  // ── Affiche le résultat dans la result-box
+  function afficherResultat(cat, ep, fin, qte) {
+    const prixML   = calculPrixML(cat, ep, fin);
+    const totalHT  = calculLigneHT(prixML, qte);
+    const tva      = calculTVA(totalHT);
+    const totalTTC = calculTTC(totalHT);
+
+    document.getElementById("res-prix-ml").textContent    = formatEuro(prixML) + " / ml";
+    document.getElementById("res-quantite").textContent   = qte.toFixed(2) + " ml";
+    document.getElementById("res-total-ht").textContent   = formatEuro(totalHT);
+    document.getElementById("res-tva").textContent        = formatEuro(tva);
+    document.getElementById("res-total-ttc").textContent  = formatEuroTTC(totalTTC);
+
+    document.getElementById("result-box").style.display   = "block";
+    document.getElementById("alert-erreur").style.display = "none";
+  }
+
+  // ── Bouton Calculer
+  function calculer() {
+    const cat  = document.getElementById("select-categorie").value;
+    const ep   = document.getElementById("select-epaisseur").value;
+    const fin  = document.getElementById("select-finition").value;
+    const qte  = parseFloat(document.getElementById("quantite").value);
+
+    if (!cat || !ep || !fin || !qte || qte <= 0) {
+      document.getElementById("alert-erreur").style.display = "block";
+      document.getElementById("result-box").style.display   = "none";
+      return;
+    }
+
+    afficherResultat(cat, ep, fin, qte);
+  }
+
+  // ── Ajouter au devis
+  function ajouterAuDevis() {
+    const cat  = document.getElementById("select-categorie").value;
+    const ep   = document.getElementById("select-epaisseur").value;
+    const fin  = document.getElementById("select-finition").value;
+    const qte  = parseFloat(document.getElementById("quantite").value);
+    const desc = document.getElementById("desc").value.trim();
+
+    if (!cat || !ep || !fin || !qte || qte <= 0) {
+      document.getElementById("alert-erreur").style.display = "block";
+      return;
+    }
+
+    ajouterLigne({ description: desc, categorie: cat, epaisseur: ep, finition: fin, quantite: qte });
+
+    // Confirmation visuelle
+    const btn = event.target;
+    btn.textContent = "✅ Ajouté !";
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = "➕ Ajouter au devis";
+      btn.disabled = false;
+    }, 1500);
+  }
+
+  // ── Reset formulaire
+  function resetFormulaire() {
+    document.getElementById("desc").value = "";
+    document.getElementById("select-categorie").value = "";
+    document.getElementById("select-epaisseur").value = "";
+    document.getElementById("select-finition").value  = "";
+    document.getElementById("quantite").value = "";
+    document.getElementById("result-box").style.display   = "none";
+    document.getElementById("alert-erreur").style.display = "none";
+  }
+
+  // ── Grille tarifaire dynamique
+  function genererGrilleTarifs() {
+    const tbody = document.getElementById("grille-body");
+    const epaisseurs = ["10","15","20","25","30"];
+    tbody.innerHTML = CATEGORIES.map(cat => `
+      <tr>
+        <td><strong>${cat.label}</strong></td>
+        ${epaisseurs.map(ep => `<td>${(TARIFS[cat.valeur]?.[ep] ?? "—")} €</td>`).join("")}
+      </tr>
+    `).join("");
+  }
+
+  // ── Init
+  document.addEventListener("DOMContentLoaded", () => {
+    genererGrilleTarifs();
+  });
+
+</script>
+</body>
+</html>
 
