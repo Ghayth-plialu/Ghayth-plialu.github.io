@@ -39,7 +39,7 @@ textarea{resize:vertical;min-height:90px}
 
 /* TABLE DEVIS */
 .devis-wrap{overflow-x:auto;margin-bottom:0}
-.devis-table{width:100%;border-collapse:collapse;font-size:12px;min-width:800px}
+.devis-table{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
 .devis-table thead tr{background:#0d2933}
 .devis-table thead th{color:#e8fc69;padding:10px 10px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
 .devis-table tbody tr:hover td{background:#f8fafc}
@@ -170,7 +170,6 @@ textarea{resize:vertical;min-height:90px}
         <thead>
           <tr>
             <th>Désignation</th>
-            <th>Catégorie</th>
             <th>Matière</th>
             <th>RAL</th>
             <th>Ép.</th>
@@ -237,7 +236,7 @@ textarea{resize:vertical;min-height:90px}
     <button class="btn-gen" onclick="genererPDF()">📄 Générer le devis PDF</button>
   </div>
 
-</div><!-- end page -->
+</div>
 
 <script>
 // ============================================================
@@ -251,8 +250,8 @@ let pdfBytes    = null;
 // INIT
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('d-date').value    = new Date().toISOString().split('T')[0];
-  document.getElementById('d-numero').value  = 'DEV-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
+  document.getElementById('d-date').value   = new Date().toISOString().split('T')[0];
+  document.getElementById('d-numero').value = 'DEV-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
   renderTable();
 });
 
@@ -266,7 +265,6 @@ function importerDepuisCalculette(){
     lignesDevis.push({
       id:          idCounter++,
       designation: l.designation || '',
-      categorie:   l.categorie   || '',
       matiere:     l.matiere     || '',
       ral:         l.ral         || '',
       ep:          l.ep          || '',
@@ -289,7 +287,7 @@ function importerDepuisCalculette(){
 function ajouterLigneManuelle(){
   lignesDevis.push({
     id: idCounter++,
-    designation:'', categorie:'', matiere:'Aluminium',
+    designation:'', matiere:'Aluminium',
     ral:'', ep:'15/10', dvp:'', lg:3000, qte:1, puHT:0
   });
   renderTable();
@@ -312,7 +310,6 @@ function updateLigne(id, champ, val){
   l[champ] = (champ === 'qte' || champ === 'puHT' || champ === 'dvp' || champ === 'lg')
     ? parseFloat(val) || 0
     : val;
-  // Rafraîchir seulement le total de la ligne + les totaux
   const totalEl = document.getElementById('total-ligne-'+id);
   if(totalEl) totalEl.textContent = (l.qte * l.puHT).toFixed(2)+' €';
   updateTotaux();
@@ -329,8 +326,7 @@ function renderTable(){
     const total = (l.qte * l.puHT).toFixed(2);
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><input value="${l.designation}" onchange="updateLigne(${l.id},'designation',this.value)" style="min-width:140px"></td>
-      <td><input value="${l.categorie}"   onchange="updateLigne(${l.id},'categorie',this.value)"   style="min-width:100px"></td>
+      <td><input value="${l.designation}" onchange="updateLigne(${l.id},'designation',this.value)" style="min-width:160px"></td>
       <td><input value="${l.matiere}"     onchange="updateLigne(${l.id},'matiere',this.value)"     style="min-width:80px"></td>
       <td><input value="${l.ral}"         onchange="updateLigne(${l.id},'ral',this.value)"         style="min-width:70px"></td>
       <td><input value="${l.ep}"          onchange="updateLigne(${l.id},'ep',this.value)"          style="min-width:55px"></td>
@@ -384,20 +380,20 @@ function removePDF(){
 // GÉNÉRATION PDF
 // ============================================================
 async function genererPDF(){
-  const { jsPDF }  = window.jspdf;
-  const doc        = new jsPDF({ unit:'mm', format:'a4' });
+  const { jsPDF } = window.jspdf;
+  const doc       = new jsPDF({ unit:'mm', format:'a4' });
 
-  const numero  = document.getElementById('d-numero').value   || 'DEV-????';
-  const date    = document.getElementById('d-date').value      || '';
-  const validite= document.getElementById('d-validite').value  || '30';
-  const chantier= document.getElementById('d-chantier').value  || '';
-  const ref     = document.getElementById('d-ref').value       || '';
-  const client  = document.getElementById('d-client').value    || '';
-  const contact = document.getElementById('d-contact').value   || '';
-  const email   = document.getElementById('d-email').value     || '';
-  const tel     = document.getElementById('d-tel').value       || '';
-  const adresse = document.getElementById('d-adresse').value   || '';
-  const comment = document.getElementById('d-comment').value   || '';
+  const numero   = document.getElementById('d-numero').value  || 'DEV-????';
+  const date     = document.getElementById('d-date').value     || '';
+  const validite = document.getElementById('d-validite').value || '30';
+  const chantier = document.getElementById('d-chantier').value || '';
+  const ref      = document.getElementById('d-ref').value      || '';
+  const client   = document.getElementById('d-client').value   || '';
+  const contact  = document.getElementById('d-contact').value  || '';
+  const email    = document.getElementById('d-email').value    || '';
+  const tel      = document.getElementById('d-tel').value      || '';
+  const adresse  = document.getElementById('d-adresse').value  || '';
+  const comment  = document.getElementById('d-comment').value  || '';
 
   // ── HEADER ──
   doc.setFillColor(13,41,51);
@@ -427,7 +423,6 @@ async function genererPDF(){
   if(ref)      doc.text(`Réf. : ${ref}`, 14, y+12);
 
   // ── BLOC CLIENT ──
-  y = 40;
   doc.setFillColor(248,250,252);
   doc.roundedRect(120,36,76,36,3,3,'F');
   doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(13,41,51);
@@ -436,16 +431,15 @@ async function genererPDF(){
   let yc = 50;
   if(client)  { doc.setFont('helvetica','bold'); doc.text(client, 124, yc); yc+=5; doc.setFont('helvetica','normal'); }
   if(contact) { doc.text(contact, 124, yc); yc+=5; }
-  if(email)   { doc.text(email, 124, yc);   yc+=5; }
-  if(tel)     { doc.text(tel, 124, yc);     yc+=5; }
+  if(email)   { doc.text(email,   124, yc); yc+=5; }
+  if(tel)     { doc.text(tel,     124, yc); yc+=5; }
   if(adresse) { doc.text(adresse, 124, yc); }
 
   y = 80;
 
-  // ── TABLEAU LIGNES ──
+  // ── TABLEAU LIGNES — SANS CATÉGORIE ──
   const rows = lignesDevis.map(l => [
     l.designation,
-    l.categorie,
     l.matiere,
     l.ral,
     l.ep,
@@ -458,22 +452,21 @@ async function genererPDF(){
 
   doc.autoTable({
     startY: y,
-    head: [['Désignation','Catégorie','Matière','RAL','Ép.','DVP','Long.','Qté','PU HT','Total HT']],
+    head: [['Désignation','Matière','RAL','Ép.','DVP','Long.','Qté','PU HT','Total HT']],
     body: rows,
     styles:      { fontSize:8, cellPadding:3 },
     headStyles:  { fillColor:[13,41,51], textColor:[232,252,105], fontStyle:'bold' },
     alternateRowStyles: { fillColor:[248,250,252] },
     columnStyles: {
-      0: { cellWidth:35 },
-      1: { cellWidth:25 },
-      2: { cellWidth:18 },
-      3: { cellWidth:14 },
-      4: { cellWidth:12 },
-      5: { cellWidth:14 },
-      6: { cellWidth:14 },
-      7: { cellWidth:10 },
-      8: { cellWidth:18 },
-      9: { cellWidth:18 }
+      0: { cellWidth:45 },
+      1: { cellWidth:22 },
+      2: { cellWidth:16 },
+      3: { cellWidth:13 },
+      4: { cellWidth:16 },
+      5: { cellWidth:16 },
+      6: { cellWidth:10 },
+      7: { cellWidth:20 },
+      8: { cellWidth:20 }
     }
   });
 
@@ -532,10 +525,10 @@ async function genererPDF(){
   if(pdfBytes){
     try {
       const { PDFDocument } = PDFLib;
-      const devisBytes  = doc.output('arraybuffer');
-      const devisDoc    = await PDFDocument.load(devisBytes);
-      const clientDoc   = await PDFDocument.load(pdfBytes);
-      const pages       = await devisDoc.copyPages(clientDoc, clientDoc.getPageIndices());
+      const devisBytes = doc.output('arraybuffer');
+      const devisDoc   = await PDFDocument.load(devisBytes);
+      const clientDoc  = await PDFDocument.load(pdfBytes);
+      const pages      = await devisDoc.copyPages(clientDoc, clientDoc.getPageIndices());
       pages.forEach(p => devisDoc.addPage(p));
       const merged = await devisDoc.save();
       const blob   = new Blob([merged], {type:'application/pdf'});
