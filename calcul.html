@@ -370,7 +370,7 @@ function setEpaisseur(ep, btn){
 }
 
 // ============================================================
-// CALCUL — taux par seconde directement (0.017 €/s par défaut)
+// CALCUL — taux par seconde (0.017 €/s) — SANS prix plancher
 // ============================================================
 function calculer(){
   const prixMat = parseFloat(document.getElementById('prix-mat').value)  || 18.54;
@@ -386,7 +386,7 @@ function calculer(){
   const nbPoinc = parseFloat(document.getElementById('nb-poinc').value) || 0;
   const tPoinc  = parseFloat(document.getElementById('t-poinc').value)  || 50;
 
-  // ✅ Taux directement en €/seconde (0.017 par défaut)
+  // Taux directement en €/seconde
   const tauxSec = parseFloat(document.getElementById('taux-mo-sec').value) || 0.017;
 
   const stLaquage = parseFloat(document.getElementById('st-laquage').value) || 0;
@@ -397,14 +397,14 @@ function calculer(){
   const coefPort  = parseFloat(document.getElementById('coef-port').value)  || 0.9;
   const coefMarge = parseFloat(document.getElementById('coef-marge').value) || 0.65;
 
-  // ✅ MATIÈRE — surface × prix €/m² ÷ coef chute
+  // MATIÈRE
   const surface  = (dvp / 1000) * (lg / 1000);
   const matBrut  = surface * prixMat;
   const matChute = matBrut / coefChute;
 
-  // ✅ MO — taux par seconde utilisé directement (0.017 €/s)
+  // MO
   const tempsTotalSec = (nbCis * tCis) + (nbPli * tPli) + (nbPoinc * tPoinc);
-  const moEuros   = tempsTotalSec * tauxSec;
+  const moEuros       = tempsTotalSec * tauxSec;
 
   // Sous-traitance
   const stTotal = (stLaquage > 0 ? surface * stLaquage : 0) + stSoudure + stTransp;
@@ -412,10 +412,8 @@ function calculer(){
   // Prix de revient
   const prHT = matChute + moEuros + stTotal;
 
-  // ✅ PV HT = PR ÷ (coef port × coef marge)
-  const pvCalc  = prHT / (coefPort * coefMarge);
-  const pvMini  = (matChute + stTotal) * 2.0;
-  const pvFinal = Math.max(pvCalc, pvMini);
+  // ✅ PV HT = PR ÷ (coef port × coef marge) — SANS prix plancher
+  const pvFinal = prHT / (coefPort * coefMarge);
 
   // Indicateurs
   const prixM2     = surface > 0 ? pvFinal / surface : 0;
