@@ -124,16 +124,13 @@ input::placeholder{color:#b0bec5}
   <label>Épaisseur</label>
   <div class="btn-group" id="ep-btns" style="margin-bottom:16px"></div>
 
-  <div class="grid2">
-    <div>
-      <label>RAL / Finition</label>
-      <input type="text" id="ral-calc" placeholder="ex: 9006, Brut, Anodisé...">
-    </div>
-    <div>
-      <label>Prix matière (€/m²)</label>
-      <input type="number" id="prix-mat" value="18.54" step="0.01">
-    </div>
+  <!-- RAL supprimé — champ unique prix matière -->
+  <div>
+    <label>Prix matière (€/m²)</label>
+    <input type="number" id="prix-mat" value="18.54" step="0.01">
   </div>
+  <!-- Champ caché pour éviter erreur JS -->
+  <input type="hidden" id="ral-calc" value="">
 </div>
 
 <!-- 3 — DIMENSIONS & MO -->
@@ -175,7 +172,6 @@ input::placeholder{color:#b0bec5}
     </div>
   </div>
 
-  <!-- ✅ MODIF 1 : Taux par seconde au lieu de taux horaire -->
   <div class="grid2">
     <div>
       <label>Taux MO (€/seconde)</label>
@@ -300,9 +296,6 @@ input::placeholder{color:#b0bec5}
 </div>
 
 <script>
-// ============================================================
-// DONNÉES
-// ============================================================
 const CATEGORIES = {
   bavette:    { label:'Bavette'    },
   couvertine: { label:'Couvertine' },
@@ -320,24 +313,13 @@ const MATIERES = {
 
 const PRIX_BASE = { aluminium:18.54, acier:12.00, inox:28.00, autre:0 };
 
-// ============================================================
-// ÉTAT
-// ============================================================
 let categorieActive = 'bavette';
 let matiereActive   = 'aluminium';
 let epaisseurActive = '15/10';
 let dernierResultat = null;
 
-// ============================================================
-// INIT
-// ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  buildEpBtns();
-});
+window.addEventListener('DOMContentLoaded', () => { buildEpBtns(); });
 
-// ============================================================
-// BUILDERS
-// ============================================================
 function buildEpBtns(){
   document.getElementById('ep-btns').innerHTML =
     MATIERES[matiereActive].epaisseurs.map(ep =>
@@ -346,9 +328,6 @@ function buildEpBtns(){
     ).join('');
 }
 
-// ============================================================
-// SETTERS
-// ============================================================
 function setCategorie(key, btn){
   categorieActive = key;
   document.querySelectorAll('#cat-btns .cat-btn').forEach(b => b.classList.remove('active'));
@@ -370,9 +349,6 @@ function setEpaisseur(ep, btn){
   btn.classList.add('active');
 }
 
-// ============================================================
-// CALCUL — identique à l'Excel PLIALU
-// ============================================================
 function calculer(){
   const prixMat = parseFloat(document.getElementById('prix-mat').value)  || 18.54;
   const dvp     = parseFloat(document.getElementById('dvp').value)       || 0;
@@ -387,7 +363,6 @@ function calculer(){
   const nbPoinc = parseFloat(document.getElementById('nb-poinc').value) || 0;
   const tPoinc  = parseFloat(document.getElementById('t-poinc').value)  || 50;
 
-  // ✅ MODIF 1 : Taux par seconde directement
   const tauxSec = parseFloat(document.getElementById('taux-mo-sec').value) || 0.017;
 
   const stLaquage = parseFloat(document.getElementById('st-laquage').value) || 0;
@@ -398,39 +373,31 @@ function calculer(){
   const coefPort  = parseFloat(document.getElementById('coef-port').value)  || 0.9;
   const coefMarge = parseFloat(document.getElementById('coef-marge').value) || 0.65;
 
-  // ✅ MATIÈRE — surface × prix €/m² ÷ coef chute
   const surface  = (dvp / 1000) * (lg / 1000);
   const matBrut  = surface * prixMat;
   const matChute = matBrut / coefChute;
 
-  // ✅ MO — taux direct en €/seconde
   const tempsTotalSec = (nbCis * tCis) + (nbPli * tPli) + (nbPoinc * tPoinc);
   const moEuros   = tempsTotalSec * tauxSec;
 
-  // Sous-traitance
   const stTotal = (stLaquage > 0 ? surface * stLaquage : 0) + stSoudure + stTransp;
 
-  // Prix de revient
   const prHT = matChute + moEuros + stTotal;
 
-  // ✅ MODIF 2 : PV HT sans prix plancher — formule Excel directe
   const pvFinal = prHT / (coefPort * coefMarge);
 
-  // Indicateurs
   const prixM2     = surface > 0 ? pvFinal / surface : 0;
   const coefSurMat = matChute > 0 ? pvFinal / matChute : 0;
   const mgb        = pvFinal > 0 ? (pvFinal - prHT) / pvFinal : 0;
 
   dernierResultat = { matChute, moEuros, stTotal, prHT, pvHT:pvFinal, prixM2, coefSurMat, mgb, dvp, lg, surface };
 
-  // Temps affiché
   const tMin = Math.floor(tempsTotalSec / 60);
   const tSec = tempsTotalSec % 60;
   document.getElementById('r-temps').value = tempsTotalSec < 60
     ? tempsTotalSec + 's'
     : tMin + 'min ' + tSec + 's';
 
-  // Affichage résultats
   document.getElementById('r-mat').textContent      = matChute.toFixed(2) + ' €';
   document.getElementById('r-mo').textContent       = moEuros.toFixed(2)  + ' €';
   document.getElementById('r-st').textContent       = stTotal.toFixed(2)  + ' €';
@@ -440,7 +407,6 @@ function calculer(){
   document.getElementById('r-mgb').textContent      = (mgb * 100).toFixed(1) + ' %';
   document.getElementById('r-coef-mat').textContent = coefSurMat.toFixed(3);
 
-  // Badge marge
   const badge = document.getElementById('r-delta-badge');
   const delta = pvFinal - matChute;
   if(mgb >= 0.45){
@@ -453,7 +419,6 @@ function calculer(){
   badge.textContent = 'Marge brute : ' + (mgb*100).toFixed(1) + '% — Delta mat : ' + delta.toFixed(2) + ' €';
   badge.style.display = 'block';
 
-  // Pré-remplir devis
   const mat = MATIERES[matiereActive].label;
   const ral = document.getElementById('ral-calc').value;
   const cat = CATEGORIES[categorieActive].label;
@@ -462,9 +427,6 @@ function calculer(){
   document.getElementById('add-qte').value   = 1;
 }
 
-// ============================================================
-// AJOUTER AU DEVIS
-// ============================================================
 function ajouterAuDevis(){
   if(!dernierResultat){ alert('Lancez d\'abord un calcul.'); return; }
 
