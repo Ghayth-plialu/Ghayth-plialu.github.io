@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>PLIALU — Configurateur</title>
+  <title>PLIALU — Dessinateur</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1a2e38;min-height:100vh}
@@ -100,7 +100,7 @@
   </a>
   <a class="nav-btn" href="calcul.html">Calculette</a>
   <a class="nav-btn" href="devis.html">Devis</a>
-  <a class="nav-btn active" href="configurateur.html">Configurateur</a>
+  <a class="nav-btn active" href="dessinateur.html">Dessinateur</a>
 </nav>
 
 <div class="page">
@@ -181,7 +181,7 @@
   <div class="card">
     <div class="card-title">Dessins enregistrés</div>
     <div id="savedList" class="saved-list">
-      <p style="color:#6b7a80;font-size:13px" id="emptyMsg">Aucun dessin enregistré.</p>
+      <p style="color:#6b7a80;font-size:13px">Aucun dessin enregistré.</p>
     </div>
   </div>
 
@@ -189,9 +189,6 @@
 
 <script>
 (() => {
-  /* ══════════════════════════════════════════
-     Canvas setup
-  ══════════════════════════════════════════ */
   const canvas = document.getElementById('drawCanvas');
   const ctx = canvas.getContext('2d');
   const wrap = document.getElementById('canvasWrap');
@@ -209,16 +206,13 @@
     restoreFromHistory();
   }
 
-  /* ══════════════════════════════════════════
-     State
-  ══════════════════════════════════════════ */
   let tool = 'pen';
   let color = '#1a2e38';
   let lineWidth = 4;
   let drawing = false;
   let history = [];
-  let startPoint = null;       // for straight-line pen
-  let snapshotBeforeLine = null; // canvas state before line preview
+  let startPoint = null;
+  let snapshotBeforeLine = null;
 
   function saveState() {
     history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
@@ -245,16 +239,12 @@
     fillWhite();
   }
 
-  /* ══════════════════════════════════════════
-     Coordinate helpers
-  ══════════════════════════════════════════ */
   function getPos(e) {
     const rect = canvas.getBoundingClientRect();
     const src = e.touches && e.touches.length ? e.touches[0] : (e.changedTouches && e.changedTouches.length ? e.changedTouches[0] : e);
     return { x: src.clientX - rect.left, y: src.clientY - rect.top };
   }
 
-  /* Helper: draw a single straight line */
   function drawLine(from, to) {
     ctx.beginPath();
     ctx.moveTo(from.x, from.y);
@@ -266,9 +256,6 @@
     ctx.stroke();
   }
 
-  /* ══════════════════════════════════════════
-     Drawing — straight lines (pen) + freehand (eraser)
-  ══════════════════════════════════════════ */
   function startDraw(e) {
     if (tool === 'text') return;
     e.preventDefault();
@@ -277,11 +264,9 @@
     const p = getPos(e);
 
     if (tool === 'pen') {
-      /* Straight line: remember start & take snapshot for preview */
       startPoint = p;
       snapshotBeforeLine = ctx.getImageData(0, 0, canvas.width, canvas.height);
     } else {
-      /* Eraser: freehand */
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
       ctx.lineCap = 'round';
@@ -297,11 +282,9 @@
     const p = getPos(e);
 
     if (tool === 'pen') {
-      /* Preview: restore snapshot then draw temporary line */
       ctx.putImageData(snapshotBeforeLine, 0, 0);
       drawLine(startPoint, p);
     } else {
-      /* Eraser freehand */
       ctx.lineTo(p.x, p.y);
       ctx.stroke();
       ctx.beginPath();
@@ -314,7 +297,6 @@
     drawing = false;
 
     if (tool === 'pen' && startPoint) {
-      /* Commit the final line */
       if (e.type !== 'mouseleave') {
         const p = getPos(e);
         ctx.putImageData(snapshotBeforeLine, 0, 0);
@@ -335,9 +317,7 @@
   canvas.addEventListener('touchmove', moveDraw, { passive: false });
   canvas.addEventListener('touchend', endDraw);
 
-  /* ══════════════════════════════════════════
-     Text tool
-  ══════════════════════════════════════════ */
+  /* ── Text tool ── */
   const textOverlay = document.getElementById('textOverlay');
   const textInput = document.getElementById('textInput');
 
@@ -374,9 +354,7 @@
   });
   textInput.addEventListener('blur', commitText);
 
-  /* ══════════════════════════════════════════
-     Toolbar — tool selection
-  ══════════════════════════════════════════ */
+  /* ── Toolbar ── */
   document.querySelectorAll('[data-tool]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-tool]').forEach(b => b.classList.remove('active'));
@@ -386,7 +364,6 @@
     });
   });
 
-  /* Toolbar — color */
   document.querySelectorAll('.swatch').forEach(sw => {
     sw.addEventListener('click', () => {
       document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
@@ -395,7 +372,6 @@
     });
   });
 
-  /* Toolbar — stroke width */
   document.querySelectorAll('.stroke-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.stroke-btn').forEach(b => b.classList.remove('active'));
@@ -404,9 +380,7 @@
     });
   });
 
-  /* ══════════════════════════════════════════
-     Undo
-  ══════════════════════════════════════════ */
+  /* ── Undo ── */
   document.getElementById('btnUndo').addEventListener('click', () => {
     if (history.length > 0) {
       history.pop();
@@ -418,16 +392,12 @@
     }
   });
 
-  /* ══════════════════════════════════════════
-     Clear all
-  ══════════════════════════════════════════ */
+  /* ── Clear ── */
   document.getElementById('btnClear').addEventListener('click', () => {
     if (confirm('Effacer tout le dessin ?')) clearCanvas();
   });
 
-  /* ══════════════════════════════════════════
-     Export helpers
-  ══════════════════════════════════════════ */
+  /* ── Export ── */
   function getCanvasDataURL() {
     const tmp = document.createElement('canvas');
     tmp.width = canvas.width;
@@ -439,9 +409,7 @@
     return tmp.toDataURL('image/png');
   }
 
-  /* ══════════════════════════════════════════
-     Download PNG
-  ══════════════════════════════════════════ */
+  /* ── Download PNG ── */
   document.getElementById('btnDownload').addEventListener('click', () => {
     const name = document.getElementById('refName').value.trim() || 'plialu-dessin';
     const a = document.createElement('a');
@@ -450,9 +418,7 @@
     a.click();
   });
 
-  /* ══════════════════════════════════════════
-     Save & add to devis
-  ══════════════════════════════════════════ */
+  /* ── Save & add to devis ── */
   document.getElementById('btnSave').addEventListener('click', () => {
     const nom = document.getElementById('refName').value.trim();
     if (!nom) {
@@ -470,7 +436,7 @@
     };
 
     let dessins = [];
-    try { dessins = JSON.parse(localStorage.getItem('plialu-devis-dessins')) || []; } catch (e) { /* ignore */ }
+    try { dessins = JSON.parse(localStorage.getItem('plialu-devis-dessins')) || []; } catch (e) {}
     dessins.push(item);
     localStorage.setItem('plialu-devis-dessins', JSON.stringify(dessins));
 
@@ -481,13 +447,11 @@
     renderSavedList();
   });
 
-  /* ══════════════════════════════════════════
-     Render saved drawings
-  ══════════════════════════════════════════ */
+  /* ── Render saved drawings ── */
   function renderSavedList() {
     const container = document.getElementById('savedList');
     let dessins = [];
-    try { dessins = JSON.parse(localStorage.getItem('plialu-devis-dessins')) || []; } catch (e) { /* ignore */ }
+    try { dessins = JSON.parse(localStorage.getItem('plialu-devis-dessins')) || []; } catch (e) {}
 
     if (!dessins.length) {
       container.innerHTML = '<p style="color:#6b7a80;font-size:13px">Aucun dessin enregistré.</p>';
@@ -521,9 +485,7 @@
     return d.innerHTML;
   }
 
-  /* ══════════════════════════════════════════
-     Init
-  ══════════════════════════════════════════ */
+  /* ── Init ── */
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
   fillWhite();
