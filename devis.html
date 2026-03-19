@@ -70,8 +70,20 @@ textarea{resize:vertical;min-height:90px}
 .upload-icon{font-size:28px;margin-bottom:6px}
 .upload-txt{font-size:14px;font-weight:700;color:#0d2933}
 .upload-sub{font-size:12px;color:#6b7a80;margin-top:4px}
-.pdf-preview{background:#f0f8fa;border:2px solid #0d2933;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;font-size:13px;color:#0d2933;font-weight:600}
-.pdf-remove{margin-left:auto;background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer}
+
+/* PDF list items */
+.pdf-item{background:#f0f8fa;border:2px solid #0d2933;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:12px;font-size:13px;color:#0d2933;font-weight:600;margin-bottom:8px}
+.pdf-item-remove{margin-left:auto;background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.pdf-item-remove:hover{background:#fca5a5}
+
+/* DESSINS IMPORTÉS */
+.dessin-item{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.dessin-item img{width:80px;height:50px;object-fit:contain;border-radius:4px;border:1px solid #dde3e8;background:#fff}
+.dessin-item-info{flex:1;min-width:0}
+.dessin-item-name{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dessin-item-date{font-size:11px;color:#6b7a80}
+.dessin-item-del{background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.dessin-item-del:hover{background:#fca5a5}
 
 /* BTN GENERER */
 .btn-gen{background:#e8fc69;color:#0d2933;border:none;border-radius:8px;padding:13px 28px;font-size:15px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
@@ -205,31 +217,33 @@ textarea{resize:vertical;min-height:90px}
     </div>
   </div>
 
-  <!-- 4 — COMMENTAIRES & OPTIONS -->
+  <!-- 4 — COMMENTAIRES & ANNEXES -->
   <div class="card">
-    <div class="card-title">4 — Commentaires & Options</div>
+    <div class="card-title">4 — Commentaires & Annexes</div>
 
     <div style="margin-bottom:18px">
       <label>Commentaire / Conditions</label>
       <textarea id="d-comment" placeholder="Conditions de règlement, délais, remarques..."></textarea>
     </div>
 
+    <!-- DESSINS DU DESSINATEUR -->
+    <div style="margin-bottom:18px">
+      <label>Dessins de pièces (depuis le dessinateur)</label>
+      <button class="btn-import" onclick="importerDessins()" style="margin-bottom:10px">✏️ Importer depuis le dessinateur</button>
+      <div id="msg-dessins" class="msg-import">✅ Dessins importés depuis le dessinateur !</div>
+      <div id="dessins-list"></div>
+    </div>
+
+    <!-- PDF CLIENTS (MULTI) -->
     <div>
-      <label>Joindre demande client (PDF)</label>
+      <label>Joindre des documents PDF (sans limite)</label>
       <div class="upload-zone" id="upload-zone" onclick="document.getElementById('pdf-input').click()">
-        <input type="file" id="pdf-input" accept="application/pdf" onchange="onPDFUpload(event)">
+        <input type="file" id="pdf-input" accept="application/pdf" multiple onchange="onPDFUpload(event)">
         <div class="upload-icon">📎</div>
-        <div class="upload-txt">Cliquez pour joindre un PDF</div>
-        <div class="upload-sub">Le document sera fusionné à la suite du devis</div>
+        <div class="upload-txt">Cliquez pour joindre un ou plusieurs PDF</div>
+        <div class="upload-sub">Les documents seront fusionnés à la suite du devis</div>
       </div>
-      <div id="pdf-preview" style="display:none" class="pdf-preview">
-        <span style="font-size:22px">📄</span>
-        <div>
-          <div id="pdf-name" style="font-weight:700"></div>
-          <div style="font-size:11px;color:#059669;margin-top:2px">✅ Sera joint en annexe</div>
-        </div>
-        <button class="pdf-remove" onclick="removePDF()">✕ Retirer</button>
-      </div>
+      <div id="pdf-list" style="margin-top:8px"></div>
     </div>
   </div>
 
@@ -247,7 +261,8 @@ textarea{resize:vertical;min-height:90px}
 // ============================================================
 let lignesDevis = [];
 let idCounter   = 1;
-let pdfBytes    = null;
+let pdfFiles    = [];       // tableau de {name, bytes}
+let dessinsImportes = [];   // tableau de {id, nom, notes, date, imageBase64}
 
 // ============================================================
 // INIT
@@ -282,6 +297,59 @@ function importerDepuisCalculette(){
   const msg = document.getElementById('msg-import');
   msg.style.display = 'block';
   setTimeout(()=>msg.style.display='none', 3000);
+}
+
+// ============================================================
+// IMPORT DEPUIS DESSINATEUR (localStorage)
+// ============================================================
+function importerDessins(){
+  const stock = JSON.parse(localStorage.getItem('plialu-devis-dessins') || '[]');
+  if(!stock.length){ alert('Aucun dessin enregistré dans le dessinateur.'); return; }
+
+  // Ajouter seulement les dessins pas déjà importés
+  let count = 0;
+  stock.forEach(d => {
+    if(!dessinsImportes.find(x => x.id === d.id)){
+      dessinsImportes.push(d);
+      count++;
+    }
+  });
+
+  if(!count){ alert('Tous les dessins sont déjà importés.'); return; }
+
+  renderDessins();
+  const msg = document.getElementById('msg-dessins');
+  msg.style.display = 'block';
+  setTimeout(()=>msg.style.display='none', 3000);
+}
+
+function supprimerDessin(id){
+  dessinsImportes = dessinsImportes.filter(d => d.id !== id);
+  renderDessins();
+}
+
+function renderDessins(){
+  const container = document.getElementById('dessins-list');
+  if(!dessinsImportes.length){
+    container.innerHTML = '';
+    return;
+  }
+  container.innerHTML = dessinsImportes.map(d => `
+    <div class="dessin-item">
+      <img src="${d.imageBase64}" alt="${d.nom}">
+      <div class="dessin-item-info">
+        <div class="dessin-item-name">✏️ ${escHtml(d.nom)}</div>
+        <div class="dessin-item-date">${escHtml(d.date)}${d.notes ? ' — ' + escHtml(d.notes) : ''}</div>
+      </div>
+      <button class="dessin-item-del" onclick="supprimerDessin('${d.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+function escHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
 }
 
 // ============================================================
@@ -359,24 +427,46 @@ function updateTotaux(){
 }
 
 // ============================================================
-// PDF CLIENT
+// PDF CLIENTS — MULTI FICHIERS
 // ============================================================
 function onPDFUpload(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => { pdfBytes = new Uint8Array(ev.target.result); };
-  reader.readAsArrayBuffer(file);
-  document.getElementById('pdf-name').textContent = file.name;
-  document.getElementById('pdf-preview').style.display = 'flex';
-  document.getElementById('upload-zone').style.display  = 'none';
+  const files = Array.from(e.target.files);
+  if(!files.length) return;
+
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      pdfFiles.push({ name: file.name, bytes: new Uint8Array(ev.target.result) });
+      renderPDFList();
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  // Reset input pour pouvoir re-sélectionner les mêmes fichiers
+  e.target.value = '';
 }
 
-function removePDF(){
-  pdfBytes = null;
-  document.getElementById('pdf-input').value = '';
-  document.getElementById('pdf-preview').style.display = 'none';
-  document.getElementById('upload-zone').style.display  = 'block';
+function supprimerPDF(idx){
+  pdfFiles.splice(idx, 1);
+  renderPDFList();
+}
+
+function renderPDFList(){
+  const container = document.getElementById('pdf-list');
+  if(!pdfFiles.length){
+    container.innerHTML = '';
+    return;
+  }
+  container.innerHTML = pdfFiles.map((f, i) => `
+    <div class="pdf-item">
+      <span style="font-size:18px">📄</span>
+      <div>
+        <div style="font-weight:700">${escHtml(f.name)}</div>
+        <div style="font-size:11px;color:#059669;margin-top:2px">✅ Sera joint en annexe</div>
+      </div>
+      <button class="pdf-item-remove" onclick="supprimerPDF(${i})">✕ Retirer</button>
+    </div>
+  `).join('');
 }
 
 // ============================================================
@@ -509,7 +599,40 @@ async function genererPDF(){
     finalY += lines.length * 5 + 4;
   }
 
-  // ── FOOTER ──
+  // ── PAGES ANNEXES : DESSINS DU DESSINATEUR ──
+  if(dessinsImportes.length){
+    dessinsImportes.forEach((d, i) => {
+      doc.addPage();
+      // Header annexe
+      doc.setFillColor(13,41,51);
+      doc.rect(0,0,210,22,'F');
+      doc.setTextColor(232,252,105);
+      doc.setFontSize(12); doc.setFont('helvetica','bold');
+      doc.text('ANNEXE — Dessin de pièce', 14, 14);
+      doc.setFontSize(8); doc.setTextColor(160,188,196); doc.setFont('helvetica','normal');
+      doc.text(numero, 196, 14, {align:'right'});
+
+      // Infos dessin
+      let dy = 30;
+      doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(13,41,51);
+      doc.text(d.nom, 14, dy);
+      dy += 6;
+      doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
+      doc.text('Date : ' + d.date, 14, dy);
+      if(d.notes){ dy += 5; doc.text('Notes : ' + d.notes, 14, dy); }
+      dy += 10;
+
+      // Image du dessin
+      try {
+        doc.addImage(d.imageBase64, 'PNG', 14, dy, 182, 100);
+      } catch(err){
+        doc.setTextColor(200,0,0);
+        doc.text('Erreur : impossible de charger le dessin.', 14, dy+10);
+      }
+    });
+  }
+
+  // ── FOOTER SUR TOUTES LES PAGES ──
   const totalPages = doc.internal.getNumberOfPages();
   for(let i = 1; i <= totalPages; i++){
     doc.setPage(i);
@@ -521,20 +644,28 @@ async function genererPDF(){
     doc.text('Page '+i+'/'+totalPages, 196, 292);
   }
 
-  // ── FUSION PDF CLIENT ──
-  if(pdfBytes){
+  // ── FUSION AVEC TOUS LES PDF JOINTS ──
+  if(pdfFiles.length){
     try {
       const { PDFDocument } = PDFLib;
       const devisBytes = doc.output('arraybuffer');
-      const devisDoc   = await PDFDocument.load(devisBytes);
-      const clientDoc  = await PDFDocument.load(pdfBytes);
-      const pages      = await devisDoc.copyPages(clientDoc, clientDoc.getPageIndices());
-      pages.forEach(p => devisDoc.addPage(p));
-      const merged = await devisDoc.save();
+      const mergedDoc  = await PDFDocument.load(devisBytes);
+
+      for(const pf of pdfFiles){
+        try {
+          const extDoc = await PDFDocument.load(pf.bytes);
+          const pages  = await mergedDoc.copyPages(extDoc, extDoc.getPageIndices());
+          pages.forEach(p => mergedDoc.addPage(p));
+        } catch(err){
+          console.error('Erreur fusion PDF:', pf.name, err);
+        }
+      }
+
+      const merged = await mergedDoc.save();
       const blob   = new Blob([merged], {type:'application/pdf'});
       const url    = URL.createObjectURL(blob);
       const a      = document.createElement('a');
-      a.href = url; a.download = 'Devis_'+numero+'_avec_demande.pdf'; a.click();
+      a.href = url; a.download = 'Devis_'+numero+'.pdf'; a.click();
       URL.revokeObjectURL(url);
     } catch(err){
       console.error(err);
