@@ -167,17 +167,6 @@
     }
     .module-card:hover .module-arrow { color: #0d2933; transform: translateX(4px); }
 
-    /* ════ STATS ════ */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 48px; }
-    .stat-card {
-      background: #0d2933;
-      border-radius: 10px;
-      padding: 24px;
-      text-align: center;
-    }
-    .stat-val { font-size: 32px; font-weight: 900; color: #e8fc69; }
-    .stat-lbl { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-
     /* ════ INFO BAND ════ */
     .info-band {
       background: rgba(232,252,105,0.1);
@@ -216,21 +205,23 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-  <a href="https://ghayth-plialu.github.io/" style="text-decoration:none;"><div class="nav-logo"><span>o</span> PLIALU</div></a>
+  <a href="https://ghayth-plialu.github.io/" style="text-decoration:none;"><div class="navbar-brand">● PLIALU</div></a>
   <div class="navbar-links">
     <a href="index.html" class="active">🏠 Accueil</a>
     <a href="calcul.html">🧮 Calculette</a>
     <a href="devis.html">📄 Devis</a>
+    <a href="dessinateur.html">✏️ Dessinateur</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-badge">🏗️ Outil interne PLIALU</div>
-  <h1>Silence ça chiffre<br><span>simple & rapide</span></h1>
+  <h1>Silence ça chiffre<br><span>simple &amp; rapide</span></h1>
   <div class="hero-btns">
     <a href="calcul.html" class="btn-primary">🧮 Lancer la calculette</a>
     <a href="devis.html" class="btn-outline">📄 Créer un devis</a>
+    <a href="dessinateur.html" class="btn-outline">✏️ Dessinateur</a>
   </div>
 </section>
 
@@ -240,7 +231,7 @@
   <!-- Modules -->
   <div class="section-title">
     <h2>Modules disponibles</h2>
-    <p>Deux outils complémentaires pour votre activité commerciale</p>
+    <p>Trois outils complémentaires pour votre activité commerciale</p>
   </div>
 
   <div class="modules-grid">
@@ -269,12 +260,24 @@
       </div>
     </a>
 
+    <a href="dessinateur.html" class="module-card">
+      <div class="module-arrow">→</div>
+      <div class="module-icon">✏️</div>
+      <h3>Dessinateur de pièces</h3>
+      <p>Dessinez le profil de vos pièces de tôle pliée, ajoutez des cotes et annotations, puis associez le croquis à votre devis.</p>
+      <div class="module-tags">
+        <span class="tag">Croquis</span>
+        <span class="tag">Annotations</span>
+        <span class="tag">Export PNG</span>
+      </div>
+    </a>
+
   </div>
 
   <!-- Info band -->
   <div class="info-band">
     <span>💡</span>
-    <p><strong>Astuce :</strong> Utilisez la calculette pour estimer vos marges, puis basculez directement vers le générateur de devis pour formaliser votre offre client en PDF professionnel.</p>
+    <p><strong>Astuce :</strong> Utilisez la calculette pour estimer vos marges, dessinez vos pièces dans le dessinateur, puis basculez vers le générateur de devis pour formaliser votre offre client en PDF professionnel.</p>
   </div>
 
 </div>
